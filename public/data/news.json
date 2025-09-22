@@ -1,0 +1,82 @@
+[
+  {
+    "id": "n-001",
+    "date": "2025-05-05",
+    "title": "Workshop Computer Vision untuk Mahasiswa",
+    "excerpt": "Pengenalan CV modern dan praktik annotasi dataset.",
+    "image": "/assets/gambar/news.jpg",
+    "slug": "workshop-computer-vision",
+    "category": "Acara",
+    "content": "<p>Konten lengkap tentang workshop, narasumber, rundown, dan pendaftaran.</p>"
+  },
+  {
+    "id": "n-002",
+    "date": "2025-05-04",
+    "title": "Call for Paper: Journal of Intelligent Systems",
+    "excerpt": "Terbuka untuk peneliti AI, deadline 30 Juni.",
+    "image": "/assets/gambar/news.jpg",
+    "slug": "call-for-paper-jis",
+    "category": "Berita",
+    "content": "<p>Informasi CFP, scope, template, dan link submit.</p>"
+  },
+  {
+    "id": "n-003",
+    "date": "2025-05-03",
+    "title": "Kuliah Tamu: Reinforcement Learning in Practice",
+    "excerpt": "Implementasi RL pada robotika dan rekomendasi.",
+    "image": "/assets/gambar/news.jpg",
+    "slug": "kuliah-tamu-rl-in-practice",
+    "category": "Acara",
+    "content": "<p>Detail pembicara, materi, dan rekaman.</p>"
+  },
+  {
+    "id": "n-004",
+    "date": "2025-05-02",
+    "title": "Bootcamp Data Mining – Batch 2",
+    "excerpt": "Kurikulum intensif 2 minggu, output mini-project.",
+    "image": "/assets/gambar/news.jpg",
+    "slug": "bootcamp-data-mining-batch-2",
+    "category": "Acara",
+    "content": "<p>Silabus, mentor, dan syarat pendaftaran.</p>"
+  },
+  {
+    "id": "n-005",
+    "date": "2025-05-01",
+    "title": "Riset Kolaborasi dengan Industri AI Nasional",
+    "excerpt": "Topik NLP & visi komputer untuk produk lokal.",
+    "image": "/assets/gambar/news.jpg",
+    "slug": "riset-kolaborasi-industri-ai",
+    "category": "Berita",
+    "content": "<p>Skema kerja sama dan timeline riset.</p>"
+  },
+  {
+    "id": "n-006",
+    "date": "2025-04-30",
+    "title": "Seminar Kecerdasan Buatan untuk Kesehatan",
+    "excerpt": "Aplikasi AI pada radiologi dan klinik.",
+    "image": "/assets/gambar/news.jpg",
+    "slug": "seminar-ai-untuk-kesehatan",
+    "category": "Acara",
+    "content": "<p>Ringkasan materi dan referensi bacaan.</p>"
+  },
+  {
+    "id": "n-007",
+    "date": "2025-04-28",
+    "title": "AI Fair 2025",
+    "excerpt": "Pameran karya mahasiswa dan dosen.",
+    "image": "/assets/gambar/news.jpg",
+    "slug": "ai-fair-2025",
+    "category": "Acara",
+    "content": "<p>Jadwal booth, lomba, dan sponsor.</p>"
+  },
+  {
+    "id": "n-008",
+    "date": "2025-04-25",
+    "title": "Publikasi Terbaru di Journal Q1",
+    "excerpt": "Topik few-shot learning untuk data terbatas.",
+    "image": "/assets/gambar/news.jpg",
+    "slug": "publikasi-q1-few-shot",
+    "category": "Berita",
+    "content": "<p>Abstrak dan link paper.</p>"
+  }
+]

@@ -1,0 +1,4 @@
+[
+  { "id": "m-001", "name": "Dr. A", "roles": ["Intelligent System","Data Mining"], "avatar": "/assets/gambar/pakYudis.jpg" },
+  { "id": "m-002", "name": "B", "roles": ["CV","ML"], "avatar": "/assets/gambar/pakYudis.jpg" }
+]

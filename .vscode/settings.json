@@ -1,0 +1,25 @@
+{
+
+  // Auto save setelah 1 detik berhenti mengetik
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 1000,
+  
+  // Format otomatis pakai Prettier
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+
+  // ESLint aktif di file JS/JSX
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact"
+  ],
+
+  // Style umum
+  "files.eol": "\n",
+  "files.insertFinalNewline": true,
+  "editor.tabSize": 2,
+  "editor.wordWrap": "on",
+
+  // Tampilkan error inline
+  "errorLens.enabled": true
+}

@@ -597,3 +597,21 @@ footer {
     max-height: 40px;
   }
 }
+
+/* Kartu & list anggota */
+.badge.bg-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  border: none;
+}
+
+.form-select.bg-dark,
+.form-control.bg-dark {
+  background-color: rgba(255,255,255,0.06) !important;
+  color: #fff !important;
+}
+
+.form-select.bg-dark:focus,
+.form-control.bg-dark:focus {
+  border-color: rgba(102,126,234,.6) !important;
+  box-shadow: 0 0 0 .25rem rgba(102,126,234,.15) !important;
+}

@@ -1,4 +1,75 @@
 [
-  { "id": "m-001", "name": "Dr. A", "roles": ["Intelligent System","Data Mining"], "avatar": "/assets/gambar/pakYudis.jpg" },
-  { "id": "m-002", "name": "B", "roles": ["CV","ML"], "avatar": "/assets/gambar/pakYudis.jpg" }
+  {
+    "id": "m-001",
+    "slug": "novanto-yudistira",
+    "name": "Novanto Yudistira",
+    "title": "S.Kom, M.Kom, PhD",
+    "position": "Koordinator",
+    "faculty": "Fakultas Ilmu Komputer",
+    "program": "Teknik Informatika",
+    "email": "novanto@ub.ac.id",
+    "socials": {
+      "twitter": "#",
+      "linkedin": "#",
+      "scholar": "#"
+    },
+    "avatar": "/assets/gambar/pakYudis.jpg",
+    "specialist": ["Data Mining", "Intelligent System", "Data Analyst"],
+    "skills": ["Deep Learning", "Computer Vision", "Data Mining", "Pattern Recognition"],
+    "certs": ["TensorFlow Developer", "AWS Practitioner"],
+    "bio": "Novanto Yudistira adalah dosen dan peneliti di Fakultas Ilmu Komputer, Universitas Brawijaya...",
+    "experience": [
+      {
+        "role": "Software Engineer",
+        "org": "PT Digital Nusantara – Jakarta",
+        "period": "Jan 2022 – Des 2023",
+        "bullets": [
+          "Mengembangkan aplikasi web berbasis React dan Node.js untuk sistem manajemen inventaris.",
+          "Implementasi API RESTful untuk integrasi dengan sistem pihak ketiga.",
+          "Menjalankan pengujian dan code review menjaga kualitas kode."
+        ]
+      },
+      {
+        "role": "Web Developer (Internship)",
+        "org": "CV Kreatif Media – Bandung",
+        "period": "Jul 2021 – Des 2021",
+        "bullets": [
+          "Pembuatan website company profile menggunakan Laravel dan MySQL.",
+          "Menyusun dokumentasi teknis untuk pengembangan lanjutan."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "degree": "PhD – Computer Science",
+        "org": "Some University",
+        "year": "2024",
+        "note": "Topik: Few-shot learning pada data terbatas."
+      },
+      {
+        "degree": "S1 – Teknik Informatika",
+        "org": "Universitas Teknologi Nusantara – Jakarta",
+        "year": "2019",
+        "note": "IPK 3.65/4.00"
+      }
+    ]
+  },
+  {
+    "id": "m-002",
+    "slug": "lorem-ipsum",
+    "name": "Lorem Ipsum",
+    "title": "S.Kom, M.Kom",
+    "position": "Anggota",
+    "faculty": "Fakultas Ilmu Komputer",
+    "program": "Sistem Informasi",
+    "email": "lorem_ipsum@ub.ac.id",
+    "socials": { "twitter": "#", "linkedin": "#", "scholar": "#" },
+    "avatar": "/assets/gambar/pakYudis.jpg",
+    "specialist": ["NLP", "ML Ops"],
+    "skills": ["LLMs", "Retrieval", "Evaluation"],
+    "certs": ["Google Cloud ML Engineer"],
+    "bio": "Peneliti NLP yang fokus pada evaluasi sistem berbasis LLM.",
+    "experience": [],
+    "education": []
+  }
 ]

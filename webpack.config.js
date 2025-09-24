@@ -1,42 +1,53 @@
 const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
+const webpack = require("webpack");
+const Dotenv = require('dotenv-webpack');
 
 module.exports = {
-  entry: "./src/index.js", // entry utama
+  mode: "development",
+  entry: "./src/index.js",
   output: {
     path: path.resolve(__dirname, "dist"),
-    filename: "bundle.js",
-    publicPath: "/",
+    filename: "bundle.[contenthash].js",
+    clean: true,
+    publicPath: "/", // untuk react-router
   },
-  mode: "development",
+  devtool: "source-map",
+  devServer: {
+    static: { directory: path.resolve(__dirname, "dist") },
+    historyApiFallback: true, // penting untuk SPA
+    port: 5173,
+    open: true,
+  },
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/, // untuk React
+        test: /\.jsx?$/,
         exclude: /node_modules/,
         use: {
           loader: "babel-loader",
+          options: {
+            presets: ["@babel/preset-env", "@babel/preset-react"],
+            plugins: ["@babel/plugin-transform-runtime"],
+          },
         },
       },
-      {
-        test: /\.css$/, // agar bisa import css
-        use: ["style-loader", "css-loader"],
-      },
-      {
-        test: /\.(png|jpg|jpeg|gif|svg)$/i, // handle image
-        type: "asset/resource",
-      },
+      { test: /\.css$/i, use: ["style-loader", "css-loader"] },
+      // Webpack 5 asset modules (untuk img/font)
+      { test: /\.(png|jpg|jpeg|gif|svg)$/i, type: "asset/resource" },
+      { test: /\.(woff2?|ttf|eot)$/i, type: "asset/resource" },
     ],
   },
-  resolve: {
-    extensions: [".js", ".jsx"],
-  },
-  devServer: {
-    static: {
-      directory: path.join(__dirname, "public"),
-    },
-    compress: true,
-    port: 3000,
-    historyApiFallback: true, // biar react-router jalan
-    open: true,
-  },
+  plugins: [
+  new HtmlWebpackPlugin({ template: 'public/index.html' }),
+  new CopyWebpackPlugin({
+    patterns: [
+      { from: 'public/data', to: 'data', noErrorOnMissing: true },
+      { from: 'public/assets', to: 'assets', noErrorOnMissing: true },
+    ],
+  }),
+  new Dotenv({ systemvars: true }), // <-- ini yang inject .env
+],
+  resolve: { extensions: [".js", ".jsx"] },
 };

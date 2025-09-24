@@ -19,3 +19,15 @@ export const getNewsBySlug = async (slug) => {
   const arr = await getNews();
   return arr.find((n) => n.slug === slug) || null;
 };
+
+// ==== Members ====
+export const getMembers = async () => {
+  const arr = await fetchJSON("/data/members.json");
+  // sort by position > name biar konsisten
+  return arr.slice().sort((a, b) => (a.position > b.position ? -1 : 1) || a.name.localeCompare(b.name));
+};
+
+export const getMemberBySlug = async (slug) => {
+  const arr = await getMembers();
+  return arr.find((m) => m.slug === slug) || null;
+};

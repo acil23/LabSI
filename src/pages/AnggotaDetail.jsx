@@ -1,10 +1,11 @@
+// src/pages/AnggotaDetail.jsx
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { getMemberDetailBySlug } from "../lib/apiMembers";
 
 export default function AnggotaDetail() {
   const { slug } = useParams();
-  const [m, setM] = useState(null);
+  const [member, setMember] = useState(null);
   const [err, setErr] = useState("");
   const [loading, setLoading] = useState(true);
 
@@ -12,8 +13,8 @@ export default function AnggotaDetail() {
     (async () => {
       try {
         setLoading(true);
-        const data = await getMemberDetailBySlug(slug);
-        setM(data);
+        const m = await getMemberDetailBySlug(slug);
+        setMember(m);
       } catch (e) {
         setErr(e.message);
       } finally {
@@ -22,102 +23,122 @@ export default function AnggotaDetail() {
     })();
   }, [slug]);
 
-  if (err) return <section className="section section-dark"><p className="text-danger">{err}</p></section>;
-  if (loading) return <section className="section section-dark"><p className="text-center">Loading…</p></section>;
-  if (!m) return null;
-
-  const specialists = (m.member_specialists || []).map(ms => ms.spec?.name).filter(Boolean);
+  if (loading) return <section className="section section-dark text-center"><p>Loading…</p></section>;
+  if (err) return <section className="section section-dark text-center"><p className="text-danger">{err}</p></section>;
+  if (!member) return <section className="section section-dark text-center"><p>Tidak ditemukan.</p></section>;
 
   return (
-    <section className="section section-dark">
-      <div className="mb-3 d-flex justify-content-between align-items-center">
-        <h2 className="section-title mb-0 text-start">Profil Anggota</h2>
-        <Link to="/anggota" className="btn btn-outline-light btn-sm">← Kembali</Link>
-      </div>
-
-      <div className="row g-4">
-        <div className="col-lg-4">
-          <div className="card card-dark p-3 text-center">
-            <div className="mx-auto mb-3" style={{ width: 220, height: 220, borderRadius: "50%", overflow: "hidden" }}>
-              <img src={m.avatar_url} alt={m.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-            </div>
-            <h4 className="text-light mb-1">{m.name}</h4>
-            <div className="text-white-80">{m.title}</div>
-            <small className="text-tanggal d-block mt-2">{m.position}</small>
-
-            <div className="mt-3">
-              {specialists.map(s => <span key={s} className="badge rounded-pill bg-primary me-1 mb-1">{s}</span>)}
-            </div>
-
-            <div className="mt-3">
-              {m.email && <a href={`mailto:${m.email}`} className="text-info text-decoration-none d-block mb-1">{m.email}</a>}
-              {/* socials */}
-              <div className="d-flex gap-2 justify-content-center">
-                {(m.socials || []).map((s, i) => (
-                  <a key={i} className="btn btn-sm btn-outline-light" href={s.url} target="_blank" rel="noreferrer">
-                    {s.type}
-                  </a>
-                ))}
+    <section className="section section-dark pb-5">{/* ruang aman dari footer */}
+      <div className="container">
+        {/* ====== HEADER: 2 kolom ====== */}
+        <div className="row g-4 align-items-start mb-4">
+          {/* LEFT */}
+          <div className="col-lg-4">
+            <div className="card card-dark p-4 h-100">
+              <div className="text-center">
+                <img
+                  src={member.avatar_url}
+                  alt={member.name}
+                  className="rounded-circle mb-3"
+                  style={{ width: 150, height: 150, objectFit: "cover" }}
+                />
+                <h4 className="text-light mb-1">{member.name}</h4>
+                {member.title && <div className="text-white-80">{member.title}</div>}
+                {member.position && <div className="text-info mt-1">{member.position}</div>}
+                {member.email && (
+                  <div className="mt-2">
+                    <a href={`mailto:${member.email}`} className="btn btn-sm btn-outline-info">{member.email}</a>
+                  </div>
+                )}
               </div>
-            </div>
 
-            <hr className="border-secondary my-3" />
+              {/* tags spesialis */}
+              <hr className="border-secondary my-4" />
+              <div className="d-flex flex-wrap gap-2">
+                {(member.member_specialists || [])
+                  .map((ms) => ms.spec?.name)
+                  .filter(Boolean)
+                  .map((s) => (
+                    <span key={s} className="badge rounded-pill bg-primary">{s}</span>
+                  ))}
+              </div>
 
-            <div className="text-start">
-              <h6 className="text-light">Bidang Keahlian</h6>
-              <ul className="mb-3">
-                {(m.skills || []).map((s, i) => <li key={i}>{s.skill_name}</li>)}
-              </ul>
-
-              {(m.certifications || []).length > 0 && (
+              {/* skills & certs (opsional tampilan ringkas) */}
+              {member.skills?.length ? (
                 <>
-                  <h6 className="text-light">Certifications</h6>
+                  <h6 className="mt-4 text-white-80">Bidang Keahlian</h6>
                   <ul className="mb-0">
-                    {m.certifications.map((c, i) => <li key={i}>{c.cert_name}</li>)}
+                    {member.skills.map((s, i) => <li key={i}>{s.skill_name}</li>)}
                   </ul>
                 </>
-              )}
-            </div>
-          </div>
-        </div>
+              ) : null}
 
-        <div className="col-lg-8">
-          <div className="card card-dark p-4 mb-4">
-            <h5 className="text-light mb-2">Tentang</h5>
-            <p className="mb-0">{m.bio}</p>
-          </div>
-
-          {(m.experiences || []).length > 0 && (
-            <div className="card card-dark p-4 mb-4">
-              <h5 className="text-light mb-3">Penelitian / Pengalaman</h5>
-              {m.experiences.map((e, idx) => (
-                <div key={idx} className="mb-3">
-                  <div className="d-flex justify-content-between">
-                    <strong className="text-light">{e.role}</strong>
-                    <span className="text-white-80">{e.period}</span>
-                  </div>
-                  <div className="text-white-80">{e.org}</div>
-                  <ul className="mt-2">
-                    {(e.bullets || []).map((b, i) => <li key={i}>{b}</li>)}
+              {member.certifications?.length ? (
+                <>
+                  <h6 className="mt-3 text-white-80">Certifications</h6>
+                  <ul className="mb-0">
+                    {member.certifications.map((c, i) => <li key={i}>{c.cert_name}</li>)}
                   </ul>
-                </div>
-              ))}
+                </>
+              ) : null}
             </div>
-          )}
+          </div>
 
-          {(m.educations || []).length > 0 && (
-            <div className="card card-dark p-4">
-              <h5 className="text-light mb-3">Pendidikan</h5>
-              <ul className="mb-0">
-                {m.educations.map((ed, i) => (
-                  <li key={i} className="mb-2">
-                    <strong>{ed.degree}</strong> — {ed.org} ({ed.year}){ed.note ? ` — ${ed.note}` : ""}
-                  </li>
-                ))}
-              </ul>
+          {/* RIGHT */}
+          <div className="col-lg-8">
+            <div className="card card-dark p-4 h-100">
+              <div className="d-flex justify-content-between align-items-start mb-3">
+                <h5 className="text-light mb-0">Tentang</h5>
+                {/* contoh tombol atau apa pun */}
+                {/* <Link className="btn btn-sm btn-outline-light">Action</Link> */}
+              </div>
+              <p className="text-white-80 mb-0">{member.bio || "—"}</p>
             </div>
-          )}
+          </div>
         </div>
+
+        {/* ====== SECTION BAWAH: full width ====== */}
+        {member.experiences?.length ? (
+          <div className="card card-dark p-4 mb-4">
+            <h5 className="text-light mb-3">Pengalaman</h5>
+            <ul className="list-unstyled mb-0">
+              {member.experiences.map((ex, i) => (
+                <li key={i} className="mb-3">
+                  <div className="d-flex justify-content-between">
+                    <div>
+                      <strong>{ex.role}</strong>{ex.org ? <> &nbsp;– {ex.org}</> : null}
+                    </div>
+                    {ex.period && <small className="text-white-80">{ex.period}</small>}
+                  </div>
+                  {ex.bullets?.length ? (
+                    <ul className="mt-2">
+                      {ex.bullets.map((b, j) => <li key={j}>{b}</li>)}
+                    </ul>
+                  ) : null}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+
+        {member.educations?.length ? (
+          <div className="card card-dark p-4 mb-5">{/* mb-5 supaya tidak “nempel” */}
+            <h5 className="text-light mb-3">Pendidikan</h5>
+            <ul className="list-unstyled mb-0">
+              {member.educations.map((ed, i) => (
+                <li key={i} className="mb-2">
+                  <strong>{ed.degree}</strong>{ed.org ? <> &nbsp;– {ed.org}</> : null}
+                  {ed.year ? <> <span className="text-white-80">({ed.year})</span></> : null}
+                  {ed.note ? <div className="text-white-80 small">{ed.note}</div> : null}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+
+        <Link to="/anggota" className="btn btn-outline-light mt-2">
+          &larr; Kembali ke daftar
+        </Link>
       </div>
     </section>
   );

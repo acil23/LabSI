@@ -8,6 +8,11 @@
   --ub-accent: #00aaff;
 }
 
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
 /* ==============================
    General Section Style
 ============================== */
@@ -615,3 +620,39 @@ footer {
   border-color: rgba(102,126,234,.6) !important;
   box-shadow: 0 0 0 .25rem rgba(102,126,234,.15) !important;
 }
+
+.layout-root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 1; /* selalu di atas background */
+}
+
+.layout-root > main {
+  flex: 1 0 auto;
+  padding-bottom: 4rem; /* lebih lega agar tidak ketemu footer */
+}
+
+footer {
+  margin-top: auto;   /* footer selalu di bawah */
+  position: relative;
+  z-index: 2;
+}
+
+.section:last-of-type {
+  margin-bottom: 0;   /* jangan tambah margin bawah ekstra */
+  padding-bottom: 3rem; /* ganti dengan padding agar konten tidak nabrak footer */
+}
+
+.neural-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;          /* selalu di belakang */
+  pointer-events: none; /* biar tidak ganggu scroll/klik */
+}
+
+.section.section-dark:last-of-type {
+  padding-bottom: 4rem; /* biar footer tidak nempel */
+}
+

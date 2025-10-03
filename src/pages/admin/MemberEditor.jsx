@@ -5,6 +5,7 @@ import {
   getMemberDetailBySlug,
   createMember,
   updateMember,
+  uploadAvatar,
 } from "../../lib/apiMembers";
 
 const toCSV = (arr) => (arr || []).join(", ");
@@ -51,6 +52,22 @@ export default function MemberEditor() {
     educations: [],
     socials: [],
   });
+
+  const [uploading, setUploading] = useState(false);
+
+  async function onPickFile(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      setUploading(true);
+      const { url } = await uploadAvatar(file, form.slug || "temp");
+      updateField("avatar_url", url); // set langsung ke form
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      setUploading(false);
+    }
+  }
 
   useEffect(() => {
     if (!isEdit) return;
@@ -218,12 +235,39 @@ export default function MemberEditor() {
             </div>
             <div className="col-md-6">
               <label className="form-label">Avatar URL</label>
-              <input
-                className="form-control bg-dark text-light border-secondary"
-                value={form.avatar_url}
-                onChange={(e) => updateField("avatar_url", e.target.value)}
-              />
+              <div className="d-flex gap-2">
+                <input
+                  className="form-control bg-dark text-light border-secondary"
+                  value={form.avatar_url}
+                  onChange={(e) => updateField("avatar_url", e.target.value)}
+                  placeholder="https://..."
+                />
+                <label className="btn btn-outline-light mb-0">
+                  {uploading ? "Uploading..." : "Upload"}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={onPickFile}
+                    hidden
+                  />
+                </label>
+              </div>
+              {form.avatar_url && (
+                <div className="mt-2">
+                  <img
+                    src={form.avatar_url}
+                    alt="preview"
+                    style={{
+                      width: 120,
+                      height: 120,
+                      objectFit: "cover",
+                      borderRadius: "50%",
+                    }}
+                  />
+                </div>
+              )}
             </div>
+
             <div className="col-md-6">
               <label className="form-label">Spesialis (koma)</label>
               <input

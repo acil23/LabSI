@@ -7,6 +7,9 @@ import {
   updateMember,
   uploadAvatar,
 } from "../../lib/apiMembers";
+import { API_BASE } from "../../lib/http";
+
+const asAbsolute = (u) => (!u ? "" : (u.startsWith("http") ? u : `${API_BASE}${u}`));
 
 const toCSV = (arr) => (arr || []).join(", ");
 const fromCSV = (s) =>
@@ -255,14 +258,9 @@ export default function MemberEditor() {
               {form.avatar_url && (
                 <div className="mt-2">
                   <img
-                    src={form.avatar_url}
+                    src={asAbsolute(form.avatar_url)}   // <= pakai prefix
                     alt="preview"
-                    style={{
-                      width: 120,
-                      height: 120,
-                      objectFit: "cover",
-                      borderRadius: "50%",
-                    }}
+                    style={{ width:120, height:120, objectFit:"cover", borderRadius:"50%" }}
                   />
                 </div>
               )}

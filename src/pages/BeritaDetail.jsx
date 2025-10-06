@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { getNewsBySlug, getNews } from "../lib/api";
+import { asAbsolute } from "../lib/http";
 
 function formatDate(iso) {
   const d = new Date(iso);
@@ -40,7 +41,12 @@ export default function BeritaDetail() {
       </div>
 
       <article className="card card-dark p-3">
-        <img src={item.image} alt={item.title} className="img-fluid rounded mb-3" />
+        <img
+          src={asAbsolute(member.avatar_url)}
+          alt={member.name}
+          className="img-fluid rounded-circle"
+          style={{ width: 140, height: 140, objectFit: "cover" }}
+        />
         <small className="text-tanggal d-block mb-2">{formatDate(item.date)} • {item.category}</small>
         <h1 className="h3 text-light">{item.title}</h1>
         {/* Konten HTML dari JSON; aman jika konten kamu sendiri */}

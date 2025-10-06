@@ -10,6 +10,9 @@ import Jurnal from "./pages/Jurnal";
 import Kontak from "./pages/Kontak";
 import MembersAdminList from "./pages/admin/MembersAdminList";
 import MemberEditor from "./pages/admin/MemberEditor";
+import JurnalIndex from "./pages/JurnalIndex";
+import JurnalDetail from "./pages/JurnalDetail";
+
 
 function App() {
   return (
@@ -20,11 +23,12 @@ function App() {
         <Route path="/anggota/:slug" element={<Layout><AnggotaDetail /></Layout>} />
         <Route path="/berita" element={<Layout><BeritaIndex /></Layout>} />
         <Route path="/berita/:slug" element={<Layout><BeritaDetail /></Layout>} />
-        <Route path="/jurnal" element={<Layout><Jurnal /></Layout>} />
         <Route path="/kontak" element={<Layout><Kontak /></Layout>} />
         <Route path="/admin/anggota" element={<Layout><MembersAdminList /></Layout>} />
         <Route path="/admin/anggota/new" element={<Layout><MemberEditor /></Layout>} />
         <Route path="/admin/anggota/:slug/edit" element={<Layout><MemberEditor /></Layout>} />
+        <Route path="/jurnal" element={<Layout><JurnalIndex /></Layout>} />
+        <Route path="/jurnal/:slug" element={<Layout><JurnalDetail /></Layout>} />
       </Routes>
     </Router>
   );

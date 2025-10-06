@@ -653,6 +653,9 @@ footer {
 }
 
 .section.section-dark:last-of-type {
-  padding-bottom: 4rem; /* biar footer tidak nempel */
+  padding-bottom: 4rem;
 }
 
+a.text-info:hover { text-decoration: underline; }
+
+ol { padding-left: 1.25rem; }

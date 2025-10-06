@@ -2,7 +2,7 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const webpack = require("webpack");
-const Dotenv = require('dotenv-webpack');
+const Dotenv = require("dotenv-webpack");
 
 module.exports = {
   mode: "development",
@@ -16,9 +16,17 @@ module.exports = {
   devtool: "source-map",
   devServer: {
     static: { directory: path.resolve(__dirname, "dist") },
-    historyApiFallback: true, // penting untuk SPA
+    historyApiFallback: true,
     port: 5173,
     open: true,
+    proxy: [
+      {
+        context: ["/members", "/uploads"],
+        target: "http://localhost:4000",
+        changeOrigin: true,
+        secure: false,
+      },
+    ],
   },
   module: {
     rules: [
@@ -40,14 +48,14 @@ module.exports = {
     ],
   },
   plugins: [
-  new HtmlWebpackPlugin({ template: 'public/index.html' }),
-  new CopyWebpackPlugin({
-    patterns: [
-      { from: 'public/data', to: 'data', noErrorOnMissing: true },
-      { from: 'public/assets', to: 'assets', noErrorOnMissing: true },
-    ],
-  }),
-  new Dotenv({ systemvars: true }), // <-- ini yang inject .env
-],
+    new HtmlWebpackPlugin({ template: "public/index.html" }),
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: "public/data", to: "data", noErrorOnMissing: true },
+        { from: "public/assets", to: "assets", noErrorOnMissing: true },
+      ],
+    }),
+    new Dotenv({ systemvars: true }), // <-- ini yang inject .env
+  ],
   resolve: { extensions: [".js", ".jsx"] },
 };

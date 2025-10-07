@@ -6,12 +6,12 @@ import AnggotaIndex from "./pages/AnggotaIndex";
 import AnggotaDetail from "./pages/AnggotaDetail";
 import BeritaIndex from "./pages/BeritaIndex";
 import BeritaDetail from "./pages/BeritaDetail";
-import Jurnal from "./pages/Jurnal";
 import Kontak from "./pages/Kontak";
 import MembersAdminList from "./pages/admin/MembersAdminList";
 import MemberEditor from "./pages/admin/MemberEditor";
 import JurnalIndex from "./pages/JurnalIndex";
 import JurnalDetail from "./pages/JurnalDetail";
+import About from "./pages/About";
 
 
 function App() {
@@ -29,6 +29,7 @@ function App() {
         <Route path="/admin/anggota/:slug/edit" element={<Layout><MemberEditor /></Layout>} />
         <Route path="/jurnal" element={<Layout><JurnalIndex /></Layout>} />
         <Route path="/jurnal/:slug" element={<Layout><JurnalDetail /></Layout>} />
+        <Route path="/about" element={<Layout><About /></Layout>} />
       </Routes>
     </Router>
   );

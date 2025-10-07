@@ -659,3 +659,34 @@ footer {
 a.text-info:hover { text-decoration: underline; }
 
 ol { padding-left: 1.25rem; }
+.about-glass {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(8px);
+}
+
+.stat-tile {
+  background: rgba(255,255,255,0.04);
+  border: 1px dashed rgba(255,255,255,0.15);
+}
+
+.timeline {
+  position: relative;
+  padding-left: 1.25rem;
+}
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 8px;
+  top: 0; bottom: 0;
+  width: 2px;
+  background: rgba(0, 180, 255, 0.35);
+  box-shadow: 0 0 8px rgba(0,180,255,0.4);
+}
+.timeline-item { position: relative; margin-bottom: 1.2rem; }
+.timeline-item .dot {
+  position: absolute; left: -1px; top: 2px;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: #0dcaf0; box-shadow: 0 0 10px #0dcaf0;
+}
+.timeline-item .content { margin-left: .75rem; }

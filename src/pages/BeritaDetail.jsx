@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { getNewsBySlug, getNews } from "../lib/api";
-import { asAbsolute } from "../lib/http";
 
 function formatDate(iso) {
   const d = new Date(iso);
@@ -18,13 +17,10 @@ export default function BeritaDetail() {
     (async () => {
       try {
         const data = await getNewsBySlug(slug);
-        if (!data) {
-          setErr("Berita tidak ditemukan.");
-          return;
-        }
         setItem(data);
-        const all = await getNews();
-        setOthers(all.filter((n) => n.slug !== slug).slice(0, 4));
+        // ambil 4 lain terbaru (boleh panggil list page=1 lalu filter)
+        const list = await getNews({ page: 1, perPage: 8 });
+        setOthers((list.data || []).filter(n => n.slug !== slug).slice(0, 4));
       } catch (e) {
         setErr(e.message);
       }
@@ -41,19 +37,21 @@ export default function BeritaDetail() {
       </div>
 
       <article className="card card-dark p-3">
-        <img
-          src={asAbsolute(member.avatar_url)}
-          alt={member.name}
-          className="img-fluid rounded-circle"
-          style={{ width: 140, height: 140, objectFit: "cover" }}
-        />
-        <small className="text-tanggal d-block mb-2">{formatDate(item.date)} • {item.category}</small>
+        {item.image && (
+          <img
+            src={item.image}
+            alt={item.title}
+            className="img-fluid rounded mb-3"
+            style={{ maxHeight: 360, objectFit: "cover" }}
+          />
+        )}
+        <small className="text-tanggal d-block mb-2">
+          {formatDate(item.date)} • {item.category}
+        </small>
         <h1 className="h3 text-light">{item.title}</h1>
-        {/* Konten HTML dari JSON; aman jika konten kamu sendiri */}
         <div className="mt-3 text-light" dangerouslySetInnerHTML={{ __html: item.content }} />
       </article>
 
-      {/* Berita lain */}
       {others.length > 0 && (
         <div className="mt-4">
           <h3 className="h5 text-light mb-3">Berita Lainnya</h3>

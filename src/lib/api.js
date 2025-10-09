@@ -1,33 +1,69 @@
-// src/lib/api.js
-const _cache = new Map();
+import { API_BASE } from "./http";
 
-export async function fetchJSON(path) {
-  if (_cache.has(path)) return _cache.get(path);
-  const res = await fetch(path, { cache: "no-cache" });
-  if (!res.ok) throw new Error(`Gagal memuat ${path}: ${res.status}`);
-  const data = await res.json();
-  _cache.set(path, data);
-  return data;
+/* ========== BERITA ========== */
+export async function getNews({ page = 1, perPage = 6, q = "", category = "" } = {}) {
+  const params = new URLSearchParams({ page, perPage });
+  if (q) params.set("q", q);
+  if (category) params.set("category", category);
+
+  const r = await fetch(`${API_BASE}/news?${params}`);
+  const j = await r.json();
+  if (!r.ok) throw new Error(j?.error || "Gagal memuat berita");
+  return j;
 }
 
-export const getNews = async () => {
-  const arr = await fetchJSON("/data/news.json");
-  return arr.slice().sort((a, b) => new Date(b.date) - new Date(a.date));
-};
+export async function getNewsBySlug(slug) {
+  const r = await fetch(`${API_BASE}/news/${slug}`);
+  const j = await r.json();
+  if (!r.ok) throw new Error(j?.error || "Berita tidak ditemukan");
+  return j;
+}
 
-export const getNewsBySlug = async (slug) => {
-  const arr = await getNews();
-  return arr.find((n) => n.slug === slug) || null;
-};
+/* ========== JURNAL ========== */
+export async function getJournals({ page = 1, perPage = 9, q = "", year = "", type = "" } = {}) {
+  const params = new URLSearchParams({ page, perPage });
+  if (q) params.set("q", q);
+  if (year) params.set("year", year);
+  if (type) params.set("type", type);
 
-// ==== Members ====
-export const getMembers = async () => {
-  const arr = await fetchJSON("/data/members.json");
-  // sort by position > name biar konsisten
-  return arr.slice().sort((a, b) => (a.position > b.position ? -1 : 1) || a.name.localeCompare(b.name));
-};
+  const r = await fetch(`${API_BASE}/journals?${params}`);
+  const j = await r.json();
+  if (!r.ok) throw new Error(j.error || "Gagal memuat data jurnal");
+  return j;
+}
 
-export const getMemberBySlug = async (slug) => {
-  const arr = await getMembers();
-  return arr.find((m) => m.slug === slug) || null;
-};
+export async function getJournalBySlug(slug) {
+  const r = await fetch(`${API_BASE}/journals/${slug}`);
+  const j = await r.json();
+  if (!r.ok) throw new Error(j.error || "Jurnal tidak ditemukan");
+  return j;
+}
+
+export async function adminCreateJournal(payload) {
+  const r = await fetch(`${API_BASE}/admin/journals`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  const j = await r.json();
+  if (!r.ok) throw new Error(j.error || "Gagal menambah jurnal");
+  return j; // {message, slug}
+}
+
+export async function adminUpdateJournal(slug, payload) {
+  const r = await fetch(`${API_BASE}/admin/journals/${slug}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  const j = await r.json();
+  if (!r.ok) throw new Error(j.error || "Gagal mengubah jurnal");
+  return j;
+}
+
+export async function adminDeleteJournal(slug) {
+  const r = await fetch(`${API_BASE}/admin/journals/${slug}`, { method: "DELETE" });
+  const j = await r.json();
+  if (!r.ok) throw new Error(j.error || "Gagal menghapus jurnal");
+  return j;
+}

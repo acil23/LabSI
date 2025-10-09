@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { getNews } from "../lib/api";
 
@@ -10,21 +10,25 @@ function formatDate(iso) {
 export default function BeritaIndex() {
   const [items, setItems] = useState([]);
   const [err, setErr] = useState("");
+  const [meta, setMeta] = useState({ count: 0, page: 1, perPage: 6 });
   const [searchParams, setSearchParams] = useSearchParams();
 
   const page = Number(searchParams.get("page") || 1);
   const perPage = 6;
 
   useEffect(() => {
-    getNews().then(setItems).catch((e) => setErr(e.message));
-  }, []);
+    (async () => {
+      try {
+        const res = await getNews({ page, perPage });
+        setItems(res.data || []);
+        setMeta({ count: res.count, page: res.page, perPage: res.perPage });
+      } catch (e) {
+        setErr(e.message);
+      }
+    })();
+  }, [page]);
 
-  const totalPages = Math.max(1, Math.ceil(items.length / perPage));
-  const paged = useMemo(() => {
-    const start = (page - 1) * perPage;
-    return items.slice(start, start + perPage);
-  }, [items, page]);
-
+  const totalPages = Math.max(1, Math.ceil(meta.count / meta.perPage));
   const go = (p) => {
     const next = Math.min(Math.max(1, p), totalPages);
     setSearchParams(next === 1 ? {} : { page: String(next) });
@@ -37,7 +41,7 @@ export default function BeritaIndex() {
       <h2 className="section-title text-center mb-4">Berita & Acara</h2>
 
       <div className="row">
-        {paged.map((n) => (
+        {items.map((n) => (
           <div className="col-md-6 mb-4" key={n.id}>
             <div className="card shadow-sm h-100 card-dark">
               <div className="row g-0">
@@ -65,10 +69,9 @@ export default function BeritaIndex() {
           </div>
         ))}
 
-        {!paged.length && <p className="text-center">Belum ada berita.</p>}
+        {!items.length && <p className="text-center">Belum ada berita.</p>}
       </div>
 
-      {/* Pagination */}
       {totalPages > 1 && (
         <nav aria-label="Navigasi halaman">
           <ul className="pagination justify-content-center mt-4">

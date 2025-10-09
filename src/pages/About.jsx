@@ -11,7 +11,7 @@ function About() {
               <h1 className="display-6 fw-bold text-light mb-3">
                 Laboratorium Sistem Cerdas
               </h1>
-              <p className="lead text-white-80 mb-4">
+              <p className="lead text-white mb-4">
                 Wadah riset dan pengembangan kecerdasan buatan di Fakultas Ilmu
                 Komputer Universitas Brawijaya. Kami berfokus pada{" "}
                 <span className="text-info fw-semibold">
@@ -32,7 +32,7 @@ function About() {
             <div className="col-lg-5">
               <div className="about-glass p-4 rounded-4">
                 <h6 className="text-uppercase text-white-50 mb-2">Ringkas</h6>
-                <ul className="list-unstyled mb-0 small text-white-80">
+                <ul className="list-unstyled mb-0 small text-white-50">
                   <li className="mb-2">• Didirikan: 2012</li>
                   <li className="mb-2">• Koordinator: Dr. Novanto Yudistira</li>
                   <li className="mb-2">• Program: S1/S2/S3 – FILKOM UB</li>
@@ -85,7 +85,7 @@ function About() {
                     ].map((tag) => (
                       <span
                         key={tag}
-                        className="badge bg-info-subtle text-info"
+                        className="badge bg-info-subtle text-dark"
                       >
                         {tag}
                       </span>
@@ -107,7 +107,7 @@ function About() {
               <div key={s.t} className="col-6 col-md-3">
                 <div className="stat-tile rounded-4 p-3 text-center">
                   <div className="h2 text-info fw-bold mb-0">{s.n}</div>
-                  <div className="small text-white-80">{s.t}</div>
+                  <div className="small text-white">{s.t}</div>
                 </div>
               </div>
             ))}
@@ -142,7 +142,7 @@ function About() {
                 <div className="dot" />
                 <div className="content">
                   <div className="text-info fw-bold">{it.year}</div>
-                  <div className="text-white-80 small">{it.text}</div>
+                  <div className="text-white small">{it.text}</div>
                 </div>
               </div>
             ))}

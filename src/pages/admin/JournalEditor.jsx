@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { getJournalBySlug } from "../../lib/api";
+import AdminGate from "../../components/adminGate";
 import { adminCreateJournal, adminUpdateJournal } from "../../lib/api";
 import { uploadForm, asAbsolute } from "../../lib/http";
 
@@ -118,7 +119,7 @@ export default function JournalEditor() {
           <h2 className="text-light m-0">{isEdit ? "Ubah Jurnal" : "Tambah Jurnal"}</h2>
           <Link to="/admin/jurnal" className="btn btn-outline-light btn-sm">← Kembali</Link>
         </div>
-
+        <AdminGate>
         <form onSubmit={onSubmit} className="card card-dark p-3">
           <div className="row g-3">
             <div className="col-md-8">
@@ -254,6 +255,7 @@ export default function JournalEditor() {
             <Link to="/admin/jurnal" className="btn btn-outline-light">Batal</Link>
           </div>
         </form>
+        </AdminGate>
       </div>
     </section>
   );

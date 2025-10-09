@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import AdminGate from "../../components/adminGate";
 import Layout from "../../components/Layout";
 
 export default function AdminHome() {
@@ -11,7 +12,7 @@ export default function AdminHome() {
             <h2 className="text-light m-0">Admin Dashboard</h2>
             {/* (opsional) tempat tombol logout nanti */}
           </div>
-
+        <AdminGate>
           <div className="row g-4">
             {/* Kartu: CRUD Anggota */}
             <div className="col-md-6">
@@ -66,6 +67,7 @@ export default function AdminHome() {
             {/* (opsional) Kartu-kartu lain nanti */}
             {/* <div className="col-md-6">… Jurnal / About / Media …</div> */}
           </div>
+          </AdminGate>
         </div>
       </section>
     </Layout>

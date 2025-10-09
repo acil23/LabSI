@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getJournals } from "../../lib/api";
+import AdminGate from "../../components/adminGate";
 import { adminDeleteJournal } from "../../lib/api";
 import { asAbsolute } from "../../lib/http";
 
@@ -44,7 +45,7 @@ export default function JournalsAdminList() {
         </div>
 
         {err && <p className="text-danger">{err}</p>}
-
+        <AdminGate>
         <div className="card card-dark p-3">
           <div className="table-responsive">
             <table className="table table-dark table-hover align-middle mb-0">
@@ -112,6 +113,7 @@ export default function JournalsAdminList() {
         </div>
 
         {loading && <p className="mt-3 text-white-80">Memuat…</p>}
+        </AdminGate>
       </div>
     </section>
   );

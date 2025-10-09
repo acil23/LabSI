@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { API_BASE } from "../../lib/http";
+import AdminGate from "../../components/adminGate";
 
 function formatDate(iso) {
   const d = new Date(iso);
@@ -58,7 +59,7 @@ export default function NewsAdminList() {
           <h2 className="text-light m-0">Kelola Berita & Acara</h2>
           <Link to="/admin/berita/new" className="btn btn-info">+ Tambah Berita Baru</Link>
         </div>
-
+        <AdminGate>
         <div className="card card-dark p-3">
           <div className="table-responsive">
             <table className="table table-dark table-hover align-middle mb-0">
@@ -118,6 +119,7 @@ export default function NewsAdminList() {
             </table>
           </div>
         </div>
+        </AdminGate>
       </div>
     </section>
   );

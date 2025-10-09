@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { API_BASE } from "../../lib/http";
+import AdminGate from "../../components/adminGate";
 
 export default function NewsEditor() {
   const navigate = useNavigate();
@@ -74,7 +75,7 @@ export default function NewsEditor() {
     <section className="section section-dark container">
       <h2 className="mb-4">{editing ? "Edit Berita" : "Tambah Berita Baru"}</h2>
       {err && <p className="text-danger">{err}</p>}
-
+      <AdminGate>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label className="form-label text-white">Judul</label>
@@ -115,6 +116,7 @@ export default function NewsEditor() {
           {loading ? "Menyimpan..." : "Simpan Berita"}
         </button>
       </form>
+      </AdminGate>
     </section>
   );
 }

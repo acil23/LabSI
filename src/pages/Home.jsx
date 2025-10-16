@@ -1,29 +1,75 @@
-import React from "react";
-import NewsSection from "../components/NewsSection";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { getNews } from "../lib/api";
+import { getMembers } from "../lib/api";
+import { asAbsolute } from "../lib/http";
+import { getCollaborations } from "../lib/api";
+import CollabMarquee from "../components/CollabMarquee";
 import heroImage from "../../public/assets/gambar/hero-image.png";
-import avatar from "../../public/assets/gambar/pakYudis.jpg";
-import logo from "../../public/assets/logo/logo.png";
-
-const members = [
-  { id: 1, name: "Member 1", img: avatar },
-  { id: 2, name: "Member 2", img: avatar },
-  { id: 3, name: "Member 3", img: avatar },
-  { id: 4, name: "Member 4", img: avatar },
-  { id: 5, name: "Member 5", img: avatar },
-  { id: 6, name: "Member 6", img: avatar },
-  { id: 7, name: "Member 7", img: avatar },
-  { id: 8, name: "Member 8", img: avatar },
-];
-
-function chunkArray(arr, size) {
-  return arr.reduce((acc, _, i) => {
-    if (i % size === 0) acc.push(arr.slice(i, i + size));
-    return acc;
-  }, []);
-}
 
 function Home() {
-  const memberChunks = chunkArray(members, 4);
+  // Berita
+  const [newsTop, setNewsTop] = useState([]);
+  const [newsList, setNewsList] = useState([]);
+  const [newsErr, setNewsErr] = useState("");
+  const [newsLoading, setNewsLoading] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        setNewsLoading(true);
+        // ambil 12 terbaru, bagi: 4 kartu + 5 list
+        const res = await getNews({ page: 1, perPage: 12 });
+        const arr = res.data || [];
+        setNewsTop(arr.slice(0, 4));
+        setNewsList(arr.slice(4, 9)); // 5 item list
+        setNewsErr("");
+      } catch (e) {
+        setNewsErr(e.message || "Gagal memuat berita");
+      } finally {
+        setNewsLoading(false);
+      }
+    })();
+  }, []);
+
+  // Anggota
+  const [members, setMembers] = useState([]);
+  const [loadingMembers, setLoadingMembers] = useState(true);
+  const [errMembers, setErrMembers] = useState("");
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await getMembers({ page: 1, perPage: 6 });
+        setMembers(res.data || []);
+        setErrMembers("");
+      } catch (e) {
+        setErrMembers(e.message);
+      } finally {
+        setLoadingMembers(false);
+      }
+    })();
+  }, []);
+
+  // kolaborasi
+
+  const [collabs, setCollabs] = useState([]);
+  const [loadingCollab, setLoadingCollab] = useState(true);
+  const [errCollab, setErrCollab] = useState("");
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await getCollaborations();
+        setCollabs(res.data || []);
+        setErrCollab("");
+      } catch (e) {
+        setErrCollab(e.message);
+      } finally {
+        setLoadingCollab(false);
+      }
+    })();
+  }, []);
 
   return (
     <div>
@@ -52,15 +98,11 @@ function Home() {
                     Exploring the Frontiers of Artificial Intelligence
                   </h1>
                   <p className="lead mt-3">
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry.
+                    Our lab is a hub for pioneering research and real-world applications, where we’re dedicated to reshaping the landscape of smart technology. From transformative projects to strategic collaborations, we’re set to make a significant mark in the world of IT.
                   </p>
-                  <div className="hero-buttons">
-                    <button className="btn btn-primary btn-lg">Join Us</button>
-                    <button className="btn btn-outline-light btn-lg">
-                      More...
-                    </button>
-                  </div>
+                  <br></br>
+                  <p>Whether you're into AI, machine learning, NLP, CV, or just curious — this is where you belong.</p>
+                  
                 </div>
               </div>
               <div className="col-md-6">
@@ -74,138 +116,172 @@ function Home() {
                   </div>
                 </div>
               </div>
+              <div className="hero-buttons">
+                    <Link to="https://www.instagram.com/is.lab.filkom/" className="btn btn-primary btn-lg">Join Us</Link>
+                    <Link to="/about" className="btn btn-outline-light btn-lg">More...</Link>
+                  </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Face of IS Lab */}
+      {/* Anggota */}
       <section className="section section-dark">
-        <h2 className="section-title text-center mb-4">Face Of IS Lab</h2>
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          <h2 className="section-title m-0">Face Of IS Lab</h2>
+          <Link to="/anggota" className="btn btn-outline-info btn-sm">
+            Lihat Semua →
+          </Link>
+        </div>
 
-        <div
-          id="labCarousel"
-          className="carousel slide position-relative"
-          data-bs-ride="carousel"
-          data-bs-interval="3000"
-        >
-          <div className="carousel-inner">
-            {memberChunks.map((chunk, idx) => (
-              <div
-                key={idx}
-                className={`carousel-item ${idx === 0 ? "active" : ""}`}
-              >
-                <div className="row justify-content-center">
-                  {chunk.map((m) => (
-                    <div className="col-md-3 mb-4" key={m.id}>
-                      <div className="card shadow-sm h-100 text-center card-dark">
-                        <img
-                          src={m.img}
-                          className="card-img-top"
-                          alt={m.name}
-                        />
-                        <div className="card-body">
-                          <h5 className="card-title text-light">{m.name}</h5>
-                          <p className="card-text">Research Interest</p>
-                          <div>
-                            <span className="card-r">Data Analyst</span>
-                            <span className="card-r">Data Mining</span>
-                            <span className="card-r">Intelligent System</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+        {loadingMembers && <p className="text-white-80">Memuat anggota...</p>}
+        {errMembers && <p className="text-danger">{errMembers}</p>}
+
+        <div className="row">
+          {members.map((m) => (
+            <div className="col-md-4 col-lg-3 mb-4" key={m.id}>
+              <div className="card card-dark text-center h-100 p-3">
+                {m.avatar_url && (
+                  <img
+                    src={asAbsolute(m.avatar_url)}
+                    alt={m.name}
+                    className="rounded-circle mx-auto mb-3"
+                    style={{ width: 120, height: 120, objectFit: "cover" }}
+                  />
+                )}
+                <h5 className="text-light">{m.name}</h5>
+                <p className="text-white-80 small mb-1">{m.title}</p>
+                <p className="text-info small">{m.position}</p>
               </div>
-            ))}
-          </div>
-
-          {/* Kontrol */}
-          <button
-            className="carousel-control-prev"
-            type="button"
-            data-bs-target="#labCarousel"
-            data-bs-slide="prev"
-            style={{ left: "-3rem" }}
-          >
-            <span className="carousel-control-prev-icon"></span>
-          </button>
-          <button
-            className="carousel-control-next"
-            type="button"
-            data-bs-target="#labCarousel"
-            data-bs-slide="next"
-            style={{ right: "-3rem" }}
-          >
-            <span className="carousel-control-next-icon"></span>
-          </button>
-
-          {/* Indicator */}
-          <div className="carousel-indicators">
-            {memberChunks.map((_, idx) => (
-              <button
-                key={idx}
-                type="button"
-                data-bs-target="#labCarousel"
-                data-bs-slide-to={idx}
-                className={idx === 0 ? "active" : ""}
-              ></button>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* Berita & Acara */}
+      {/* Berita & Acara (dinamis dari DB) */}
+      <section className="section section-dark">
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          <h2 className="section-title m-0">Berita & Acara</h2>
+          <Link to="/berita" className="btn btn-outline-info btn-sm">
+            Lihat semua →
+          </Link>
+        </div>
 
-      <NewsSection mainCount={4} listCount={5} />
+        {newsLoading && (
+          <div className="card card-dark p-3 mb-3">
+            <span className="text-white-80">Memuat berita…</span>
+          </div>
+        )}
+
+        {newsErr && (
+          <div className="card card-dark p-3 mb-3">
+            <span className="text-danger">{newsErr}</span>
+          </div>
+        )}
+
+        {!newsLoading && !newsErr && (
+          <>
+            {/* 4 kartu utama */}
+            <div className="row">
+              {newsTop.map((n) => (
+                <div className="col-md-6 mb-4" key={n.slug}>
+                  <div className="card shadow-sm h-100 card-dark">
+                    <div className="row g-0">
+                      <div className="col-md-4">
+                        {n.image && (
+                          <img
+                            src={asAbsolute(n.image)}
+                            className="img-fluid rounded-start h-100 w-100"
+                            alt={n.title}
+                            style={{ objectFit: "cover" }}
+                            loading="lazy"
+                          />
+                        )}
+                      </div>
+                      <div className="col-md-8">
+                        <div className="card-body">
+                          <small className="text-tanggal d-block mb-2">
+                            {new Date(n.date).toLocaleDateString("id-ID")}
+                          </small>
+                          <h5 className="card-title text-light">{n.title}</h5>
+                          <p className="text-white-80">{n.excerpt}</p>
+                          <Link
+                            to={`/berita/${n.slug}`}
+                            className="text-info fw-bold text-decoration-none"
+                          >
+                            read more...
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+              {!newsTop.length && (
+                <p className="text-center text-white-80">Belum ada berita.</p>
+              )}
+            </div>
+
+            {/* List kecil di bawahnya */}
+            {newsList.length > 0 && (
+              <div className="card card-dark p-3 news-list">
+                <ul className="list-group list-group-flush">
+                  {newsList.map((n) => (
+                    <li
+                      key={n.slug}
+                      className="list-group-item d-flex justify-content-between align-items-start"
+                    >
+                      <div>
+                        <Link
+                          to={`/berita/${n.slug}`}
+                          className="text-info fw-semibold text-decoration-none"
+                        >
+                          {n.title}
+                        </Link>
+                        <div className="small text-white-50">
+                          {n.venue ? `${n.venue} • ` : ""}
+                          {new Date(n.date).toLocaleDateString("id-ID")}
+                          {n.category ? ` • ${n.category}` : ""}
+                        </div>
+                      </div>
+                      <div className="small text-white-50 ms-2">
+                        {/* tag atau kategori kecil */}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </>
+        )}
+      </section>
 
       {/* Our Collaborations */}
       <section className="section section-dark">
-        <h2 className="section-title text-center mb-4">Our Collaborations</h2>
+        <h2 className="section-title text-center mb-3">Our Collaborations</h2>
 
-        <div className="overflow-hidden py-3">
-          <div className="d-flex align-items-center gap-5 logo-slider">
-            {[...Array(2)].map((_, idx) =>
-              [1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-                <img
-                  key={`${idx}-${i}`}
-                  src={logo}
-                  alt={`Logo ${i}`}
-                  className="img-fluid"
-                  style={{ maxHeight: "100px" }}
-                />
-              ))
-            )}
+        {loadingCollab && (
+          <div className="card card-dark p-3 mb-4 text-center">
+            <span className="text-white-80">Memuat kolaborasi…</span>
           </div>
-        </div>
-        {/* Partner Count Stats */}
-        <div className="row mt-5 text-center">
-          <div className="col-md-3 col-6 mb-3">
-            <div className="stat-card">
-              <h3 className="stat-number">50+</h3>
-              <p className="stat-label">Research Partners</p>
-            </div>
+        )}
+
+        {errCollab && (
+          <div className="card card-dark p-3 mb-4 text-center">
+            <span className="text-danger">{errCollab}</span>
           </div>
-          <div className="col-md-3 col-6 mb-3">
-            <div className="stat-card">
-              <h3 className="stat-number">25+</h3>
-              <p className="stat-label">Industry Partners</p>
-            </div>
+        )}
+
+        {!loadingCollab && !errCollab && collabs.length > 0 && (
+          <CollabMarquee items={collabs} height={90} gap={34} duration={28} />
+        )}
+
+        {!loadingCollab && !errCollab && collabs.length === 0 && (
+          <div className="card card-dark p-3 text-center">
+            <span className="text-white-80">Belum ada data kolaborasi.</span>
           </div>
-          <div className="col-md-3 col-6 mb-3">
-            <div className="stat-card">
-              <h3 className="stat-number">15+</h3>
-              <p className="stat-label">Countries</p>
-            </div>
-          </div>
-          <div className="col-md-3 col-6 mb-3">
-            <div className="stat-card">
-              <h3 className="stat-number">100+</h3>
-              <p className="stat-label">Projects</p>
-            </div>
-          </div>
-        </div>
+        )}
       </section>
     </div>
   );

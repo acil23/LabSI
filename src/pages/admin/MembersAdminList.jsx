@@ -39,19 +39,24 @@ export default function MembersAdminList() {
   }
 
   return (
-    <section className="section section-dark">
-      <h2 className="section-title mb-3">Admin • Anggota</h2>
-      <AdminGate>
+    <AdminGate>
+      <section className="section section-dark">
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          <Link to="/admin" className="btn btn-warning">
+            Kembali
+          </Link>
+          <h2 className="section-title m-0">Kelola Anggota</h2>
+          <Link to="/admin/anggota/new" className="btn btn-info">
+            + Tambah
+          </Link>
+        </div>
         <div className="d-flex justify-content-between mb-3">
           <input
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="Cari nama..."
-            className="form-control bg-dark text-light border-secondary w-50"
+            className="form-control bg-dark text-light border-secondary "
           />
-          <Link to="/admin/anggota/new" className="btn btn-primary">
-            + Tambah Anggota
-          </Link>
         </div>
         {err && <p className="text-danger">{err}</p>}
         {loading ? (
@@ -102,7 +107,7 @@ export default function MembersAdminList() {
             </table>
           </div>
         )}
-      </AdminGate>
-    </section>
+      </section>
+    </AdminGate>
   );
 }

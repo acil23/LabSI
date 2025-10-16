@@ -17,6 +17,8 @@ import NewsAdminList from "./pages/admin/NewsAdminList";
 import NewsEditor from "./pages/admin/NewsEditor";
 import JournalsAdminList from "./pages/admin/JournalsAdminList";
 import JournalEditor from "./pages/admin/JournalEditor";
+import CollabAdminList from "./pages/admin/CollabAdminList";
+import CollabEditor from "./pages/admin/CollabEditor";
 
 
 function App() {
@@ -42,6 +44,9 @@ function App() {
         <Route path="/admin/jurnal" element={<Layout><JournalsAdminList /></Layout>} />
         <Route path="/admin/jurnal/new" element={<Layout><JournalEditor /></Layout>} />
         <Route path="/admin/jurnal/:slug/edit" element={<Layout><JournalEditor /></Layout>} />
+        <Route path="/admin/kolaborasi" element={<Layout><CollabAdminList /></Layout>} />
+        <Route path="/admin/kolaborasi/new" element={<Layout><CollabEditor /></Layout>} />
+        <Route path="/admin/kolaborasi/:id/edit" element={<Layout><CollabEditor /></Layout>} />
       </Routes>
     </Router>
   );

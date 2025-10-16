@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
+import NewsHeroCarousel from "../components/NewsHeroCarousel";
 import { getNews } from "../lib/api";
 
 function formatDate(iso) {
   const d = new Date(iso);
-  return `${String(d.getDate()).padStart(2, "0")} / ${String(d.getMonth() + 1).padStart(2, "0")} / ${d.getFullYear()}`;
+  return `${String(d.getDate()).padStart(2, "0")} / ${String(
+    d.getMonth() + 1
+  ).padStart(2, "0")} / ${d.getFullYear()}`;
 }
 
 export default function BeritaIndex() {
+  const [heroItems, setHeroItems] = useState([]);
+  const [listItems, setListItems] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [items, setItems] = useState([]);
   const [err, setErr] = useState("");
   const [meta, setMeta] = useState({ count: 0, page: 1, perPage: 6 });
@@ -22,6 +28,22 @@ export default function BeritaIndex() {
         const res = await getNews({ page, perPage });
         setItems(res.data || []);
         setMeta({ count: res.count, page: res.page, perPage: res.perPage });
+        setLoading(true);
+        // 1) coba ambil yang pinned (maks 5)
+        let pinnedRes;
+        try {
+          pinnedRes = await getNews({ page: 1, perPage: 5, pinned: true });
+        } catch (_) {
+          pinnedRes = { data: [] };
+        }
+
+        if (pinnedRes.data?.length) {
+          setHeroItems(pinnedRes.data);
+        } else {
+          // 2) fallback ambil 5 terbaru
+          const latest = await getNews({ page: 1, perPage: 5 });
+          setHeroItems(latest.data || []);
+        }
       } catch (e) {
         setErr(e.message);
       }
@@ -40,6 +62,9 @@ export default function BeritaIndex() {
     <section className="section section-dark">
       <h2 className="section-title text-center mb-4">Berita & Acara</h2>
 
+      {/* HERO CAROUSEL */}
+      {!!heroItems.length && <NewsHeroCarousel items={heroItems} />}
+
       <div className="row">
         {items.map((n) => (
           <div className="col-md-6 mb-4" key={n.id}>
@@ -56,10 +81,15 @@ export default function BeritaIndex() {
                 </div>
                 <div className="col-md-8">
                   <div className="card-body">
-                    <small className="text-tanggal d-block mb-2">{formatDate(n.date)}</small>
+                    <small className="text-tanggal d-block mb-2">
+                      {formatDate(n.date)}
+                    </small>
                     <h5 className="card-title text-light">{n.title}</h5>
                     <p className="text-white-80">{n.excerpt}</p>
-                    <Link to={`/berita/${n.slug}`} className="text-info fw-bold text-decoration-none">
+                    <Link
+                      to={`/berita/${n.slug}`}
+                      className="text-info fw-bold text-decoration-none"
+                    >
                       read more...
                     </Link>
                   </div>
@@ -76,15 +106,23 @@ export default function BeritaIndex() {
         <nav aria-label="Navigasi halaman">
           <ul className="pagination justify-content-center mt-4">
             <li className={`page-item ${page === 1 ? "disabled" : ""}`}>
-              <button className="page-link" onClick={() => go(page - 1)}>Previous</button>
+              <button className="page-link" onClick={() => go(page - 1)}>
+                Previous
+              </button>
             </li>
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
               <li key={p} className={`page-item ${p === page ? "active" : ""}`}>
-                <button className="page-link" onClick={() => go(p)}>{p}</button>
+                <button className="page-link" onClick={() => go(p)}>
+                  {p}
+                </button>
               </li>
             ))}
-            <li className={`page-item ${page === totalPages ? "disabled" : ""}`}>
-              <button className="page-link" onClick={() => go(page + 1)}>Next</button>
+            <li
+              className={`page-item ${page === totalPages ? "disabled" : ""}`}
+            >
+              <button className="page-link" onClick={() => go(page + 1)}>
+                Next
+              </button>
             </li>
           </ul>
         </nav>

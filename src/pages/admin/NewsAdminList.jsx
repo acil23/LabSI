@@ -53,13 +53,14 @@ export default function NewsAdminList() {
   if (err) return <section className="section section-dark"><p className="text-danger">{err}</p></section>;
 
   return (
+    <AdminGate>
     <section className="section section-dark">
       <div className="container">
         <div className="d-flex justify-content-between align-items-center mb-4">
+          <Link to="/admin" className="btn btn-warning">Kembali</Link>
           <h2 className="text-light m-0">Kelola Berita & Acara</h2>
           <Link to="/admin/berita/new" className="btn btn-info">+ Tambah Berita Baru</Link>
         </div>
-        <AdminGate>
         <div className="card card-dark p-3">
           <div className="table-responsive">
             <table className="table table-dark table-hover align-middle mb-0">
@@ -119,8 +120,8 @@ export default function NewsAdminList() {
             </table>
           </div>
         </div>
-        </AdminGate>
       </div>
     </section>
+    </AdminGate>
   );
 }

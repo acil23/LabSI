@@ -40,6 +40,7 @@ export default function JournalsAdminList() {
     <section className="section section-dark">
       <div className="container">
         <div className="d-flex justify-content-between align-items-center mb-4">
+          <Link to="/admin" className="btn btn-warning">Kembali</Link>
           <h2 className="text-light m-0">Kelola Jurnal</h2>
           <Link to="/admin/jurnal/new" className="btn btn-info">+ Tambah Jurnal</Link>
         </div>

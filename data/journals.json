@@ -1,0 +1,78 @@
+[
+  {
+    "id": 1,
+    "slug": "pemanfaatan-ml-untuk-prediksi-penyakit-jantung",
+    "title": "Pemanfaatan Machine Learning untuk Prediksi Penyakit Jantung",
+    "authors": ["Andi Pratama", "Siti Aisyah", "Budi Santoso"],
+    "affiliations": [
+      "Program Studi Sistem Informasi, Universitas Teknologi Nusantara",
+      "Fakultas Ilmu Komputer, Universitas Harapan Bangsa"
+    ],
+    "publisher": "Jurnal Sistem Informasi",
+    "year": 2024,
+    "abstract": "Penelitian ini membahas penerapan algoritma machine learning dalam memprediksi penyakit jantung berdasarkan data klinis. Model yang dibandingkan meliputi Logistic Regression, SVM, K-Nearest Neighbors, dan Random Forest. Hasil eksperimen menunjukkan bahwa Random Forest memberikan akurasi terbaik pada dataset UCI Heart Disease setelah melalui tahapan feature scaling dan hyperparameter tuning.",
+    "keywords": ["Machine Learning", "Kesehatan Digital", "Klasifikasi"],
+    "pdfUrl": "https://example.com/jurnal-2024-001.pdf",
+    "sections": [
+      {
+        "heading": "Pendahuluan",
+        "body": "Penyakit jantung merupakan salah satu penyebab kematian tertinggi di dunia. Prediksi dini membantu klinisi dalam pengambilan keputusan terapi. Penelitian ini mengeksplorasi model ML yang ringan dan dapat direplikasi."
+      },
+      {
+        "heading": "Metodologi",
+        "body": "Dataset UCI Heart Disease digunakan. Tahapan: pembersihan data, standardisasi fitur, split train-test 80:20, pencarian hyperparameter via grid search. Metrik yang digunakan meliputi akurasi, precision, recall, dan F1-score."
+      },
+      {
+        "heading": "Hasil dan Pembahasan",
+        "body": "Random Forest mencapai akurasi 89%, mengungguli SVM (87%) dan Logistic Regression (84%). Analisis feature importance menyoroti kolesterol, tekanan darah, dan usia sebagai fitur dominan."
+      },
+      {
+        "heading": "Kesimpulan",
+        "body": "Random Forest memberikan performa terbaik untuk data ini dan cocok untuk implementasi awal pada klinik skala kecil. Penelitian lanjutan akan mengevaluasi model pada data lokal yang lebih beragam."
+      }
+    ],
+    "references": [
+      "WHO (2023). Cardiovascular diseases (CVDs).",
+      "Breiman, L. (2001). Random Forests. Machine Learning, 45(1), 5–32.",
+      "Cortes, C., & Vapnik, V. (1995). Support-vector networks. Machine Learning, 20(3), 273–297."
+    ]
+  },
+  {
+    "id": 2,
+    "slug": "deteksi-penyakit-padi-berbasis-cnn",
+    "title": "Deteksi Penyakit Padi Berbasis Convolutional Neural Network",
+    "authors": ["Dewi Lestari", "Rama Prakoso"],
+    "affiliations": ["Lab Sistem Cerdas, FILKOM UB"],
+    "publisher": "Jurnal Informatika Cerdas",
+    "year": 2023,
+    "abstract": "Makalah ini mengusulkan arsitektur CNN ringan untuk klasifikasi penyakit padi pada citra daun di kondisi lapangan. Augmentasi data dan transfer learning digunakan untuk meningkatkan generalisasi.",
+    "keywords": ["Computer Vision", "CNN", "Pertanian Cerdas"],
+    "pdfUrl": "https://example.com/jurnal-2023-017.pdf",
+    "sections": [
+      { "heading": "Pendahuluan", "body": "Latar belakang pertanian presisi dan kebutuhan diagnosis cepat di lapangan." },
+      { "heading": "Metodologi", "body": "Model dasar MobileNetV3, fine-tuning 20 epoch, Adam, lr=1e-4. Augmentasi: flip, rotation, color jitter." },
+      { "heading": "Hasil", "body": "Akurasi top-1 93.1% pada dataset uji; waktu inferensi di perangkat low-power < 50ms/frame." }
+    ],
+    "references": [
+      "Howard et al. (2019). Searching for MobileNetV3.",
+      "Shorten & Khoshgoftaar (2019). A survey on image data augmentation."
+    ]
+  },
+  {
+    "id": 3,
+    "slug": "sistem-rekomendasi-pariwisata-berbasis-graph",
+    "title": "Sistem Rekomendasi Pariwisata Berbasis Graph Neural Networks",
+    "authors": ["Nadia Permata", "Yusuf Akbar"],
+    "affiliations": ["Program Studi Teknik Informatika, Universitas Brawijaya"],
+    "publisher": "Journal of Smart Computing",
+    "year": 2022,
+    "abstract": "Studi ini mengevaluasi GNN untuk rekomendasi destinasi pariwisata dengan memanfaatkan relasi user–item–kategori. Dibandingkan baseline MF dan LightFM.",
+    "keywords": ["Recommender System", "Graph Neural Network", "Tourism"],
+    "pdfUrl": "",
+    "sections": [
+      { "heading": "Pendahuluan", "body": "Motivasi sistem rekomendasi pada industri pariwisata." },
+      { "heading": "Eksperimen", "body": "Dataset skala menengah, split leave-one-out. Metrik: NDCG@10, HitRate@10." }
+    ],
+    "references": []
+  }
+]

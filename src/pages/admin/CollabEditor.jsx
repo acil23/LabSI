@@ -4,15 +4,17 @@ import {
   getCollaborationById,
   createCollaboration,
   updateCollaboration,
-  uploadCollabLogo,
 } from "../../lib/api";
 import { asAbsolute } from "../../lib/http";
 import AdminGate from "../../components/adminGate";
+import { Link } from "react-router-dom";
+import { uploadWithProgress } from "../../lib/uploadProgress";
 
 export default function CollabEditor() {
-  const { id } = useParams(); // kalau ada => mode edit
+  const { id } = useParams();
   const nav = useNavigate();
 
+  // ===== State dasar form =====
   const [form, setForm] = useState({
     name: "",
     organization: "",
@@ -22,10 +24,17 @@ export default function CollabEditor() {
     description: "",
     link: "",
   });
+
   const [loading, setLoading] = useState(!!id);
   const [saving, setSaving] = useState(false);
   const [err, setErr] = useState("");
 
+  // ===== State upload logo =====
+  const [logoUploading, setLogoUploading] = useState(false);
+  const [logoProgress, setLogoProgress] = useState(0);
+  const [logoLocal, setLogoLocal] = useState(""); // ⬅️ inilah yang error di punyamu
+
+  // ===== Fetch data jika edit mode =====
   useEffect(() => {
     if (!id) return;
     (async () => {
@@ -50,20 +59,34 @@ export default function CollabEditor() {
     })();
   }, [id]);
 
-  const onUpload = async (e) => {
+  // ===== Upload logo dengan progress bar =====
+  async function onPickLogo(e) {
     const file = e.target.files?.[0];
     if (!file) return;
+
+    const temp = URL.createObjectURL(file);
+    setLogoLocal(temp);
+    setLogoUploading(true);
+    setLogoProgress(0);
+
     try {
-      const up = await uploadCollabLogo(file);
-      setForm((f) => ({ ...f, logo_url: up.url }));
-    } catch (e) {
-      alert(e.message);
+      const { url } = await uploadWithProgress({
+        url: `/uploads/collab/logo`, // tanpa /api
+        file,
+        onProgress: setLogoProgress,
+      });
+      setForm((f) => ({ ...f, logo_url: url }));
+    } catch (err) {
+      alert(err.message || "Upload gagal");
     } finally {
+      setLogoUploading(false);
+      setTimeout(() => URL.revokeObjectURL(temp), 1000);
       e.target.value = "";
     }
-  };
+  }
 
-  const onSubmit = async (e) => {
+  // ===== Submit form =====
+  async function onSubmit(e) {
     e.preventDefault();
     try {
       setSaving(true);
@@ -75,86 +98,148 @@ export default function CollabEditor() {
     } finally {
       setSaving(false);
     }
-  };
+  }
 
   return (
     <AdminGate>
       <section className="section section-dark">
-        <h2 className="section-title mb-3">{id ? "Edit Kolaborasi" : "Tambah Kolaborasi"}</h2>
-
+        <div className="d-flex justify-content-between align-items-center mb-3">
+            <Link to="/admin/kolaborasi" className="btn btn-warning">Kembali</Link>
+            <h2 className="section-title mb-3">
+              {id ? "Edit Kolaborasi" : "Tambah Kolaborasi"}
+            </h2>
+            <Link to="/admin" className="btn btn-secondary">Home (Admin)</Link>
+        </div>
         {loading && <p className="text-white-80">Memuat…</p>}
         {err && <p className="text-danger">{err}</p>}
-        
+
         {!loading && (
           <form className="card card-dark p-3" onSubmit={onSubmit}>
-            <div className="row g-3">
+            <div className="row g-2">
               <div className="col-md-6">
                 <label className="form-label">Nama *</label>
-                <input className="form-control bg-dark text-light"
+                <input
+                  className="form-control bg-dark text-light border-secondary"
                   value={form.name}
-                  onChange={(e)=>setForm({...form, name:e.target.value})}
+                  onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
                   required
                 />
               </div>
               <div className="col-md-6">
                 <label className="form-label">Organisasi</label>
-                <input className="form-control bg-dark text-light"
+                <input
+                  className="form-control bg-dark text-light border-secondary"
                   value={form.organization}
-                  onChange={(e)=>setForm({...form, organization:e.target.value})}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, organization: e.target.value }))
+                  }
                 />
               </div>
 
-              <div className="col-md-4">
+              <div className="col-md-3">
                 <label className="form-label">Tipe</label>
-                <select className="form-select bg-dark text-light"
+                <select
+                  className="form-select bg-dark text-light border-secondary"
                   value={form.type}
-                  onChange={(e)=>setForm({...form, type:e.target.value})}>
-                  <option value="other">Other</option>
+                  onChange={(e) => setForm((f) => ({ ...f, type: e.target.value }))}
+                >
                   <option value="research">Research</option>
                   <option value="industry">Industry</option>
+                  <option value="education">Education</option>
+                  <option value="other">Other</option>
                 </select>
               </div>
-              <div className="col-md-4">
+
+              <div className="col-md-3">
                 <label className="form-label">Negara</label>
-                <input className="form-control bg-dark text-light"
+                <input
+                  className="form-control bg-dark text-light border-secondary"
                   value={form.country}
-                  onChange={(e)=>setForm({...form, country:e.target.value})}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, country: e.target.value }))
+                  }
                 />
               </div>
-              <div className="col-md-4">
+
+              <div className="col-md-3">
                 <label className="form-label">Tautan</label>
-                <input className="form-control bg-dark text-light"
+                <input
+                  className="form-control bg-dark text-light border-secondary"
                   value={form.link}
-                  onChange={(e)=>setForm({...form, link:e.target.value})}
-                  placeholder="https://…"
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, link: e.target.value }))
+                  }
+                  placeholder="https://..."
                 />
               </div>
 
-              <div className="col-md-8">
-                <label className="form-label">Deskripsi</label>
-                <textarea className="form-control bg-dark text-light" rows={4}
-                  value={form.description}
-                  onChange={(e)=>setForm({...form, description:e.target.value})}
-                />
-              </div>
-
-              <div className="col-md-4">
+              <div className="col-md-3">
                 <label className="form-label">Logo</label>
-                <div className="d-flex gap-2 align-items-center">
-                  <input type="file" accept="image/*" className="form-control bg-dark text-light" onChange={onUpload}/>
-                </div>
-                {form.logo_url && (
-                  <div className="mt-2">
-                    <img src={asAbsolute(form.logo_url)} alt="logo" style={{height:70}} />
-                    <div className="small text-white-50">{form.logo_url}</div>
+                <br />
+                <label className="btn btn-outline-light">
+                  {logoUploading ? (
+                    <>
+                      <span className="spinner-border spinner-border-sm me-2" />
+                      {logoProgress}%
+                    </>
+                  ) : (
+                    "Upload Logo"
+                  )}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    hidden
+                    onChange={onPickLogo}
+                  />
+                </label>
+
+                {logoUploading && (
+                  <div className="progress mt-2" style={{ height: 6 }}>
+                    <div
+                      className="progress-bar"
+                      style={{ width: `${logoProgress}%` }}
+                    />
                   </div>
+                )}
+
+                {(logoLocal || form.logo_url) && (
+                  <img
+                    src={logoLocal || asAbsolute(form.logo_url)}
+                    alt="Logo preview"
+                    style={{
+                      maxWidth: 140,
+                      borderRadius: 8,
+                      display: "block",
+                      marginTop: 10,
+                    }}
+                  />
                 )}
               </div>
             </div>
 
+            <div className="col-12 mt-3">
+              <label className="form-label">Deskripsi</label>
+              <textarea
+                rows={4}
+                className="form-control bg-dark text-light border-secondary"
+                value={form.description}
+                onChange={(e) =>
+                  setForm((f) => ({ ...f, description: e.target.value }))
+                }
+              />
+            </div>
+
             <div className="mt-3 d-flex gap-2">
-              <button disabled={saving} className="btn btn-info">{saving ? "Menyimpan…" : "Simpan"}</button>
-              <button type="button" onClick={()=>history.back()} className="btn btn-outline-light">Batal</button>
+              <button disabled={saving} className="btn btn-info">
+                {saving ? "Menyimpan…" : "Simpan"}
+              </button>
+              <button
+                type="button"
+                onClick={() => history.back()}
+                className="btn btn-outline-light"
+              >
+                Batal
+              </button>
             </div>
           </form>
         )}

@@ -1,123 +1,579 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import NeuralNetworkBackground from "../components/NeuralNetworkBackground";
+import { motion } from "framer-motion";
 
 export default function About() {
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0 }
+  };
+
+  const fadeInLeft = {
+    hidden: { opacity: 0, x: -50 },
+    visible: { opacity: 1, x: 0 }
+  };
+
+  const fadeInRight = {
+    hidden: { opacity: 0, x: 50 },
+    visible: { opacity: 1, x: 0 }
+  };
+
+  const scaleIn = {
+    hidden: { opacity: 0, scale: 0.9 },
+    visible: { opacity: 1, scale: 1 }
+  };
+
+  const staggerContainer = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2
+      }
+    }
+  };
+
   return (
     <div className="page-with-bg">
       <NeuralNetworkBackground />
 
-      <section className="section section-dark pb-0">
-        <header className="about-hero text-center">
-          <h1 className="display-6 fw-bold mb-2 text-white">Tentang Laboratorium Sistem Cerdas</h1>
-          <p className="text-white-50 m-auto" style={{maxWidth: 760}}>
-            Eksplorasi bidang <em>Artificial Intelligence</em> di FILKOM UB—riset, edukasi, dan kolaborasi
-            yang berdampak.
-          </p>
-        </header>
+      {/* HERO SECTION - Enhanced */}
+      <section className="section section-dark pb-5" style={{ paddingTop: '100px' }}>
+        <motion.header 
+          className="about-hero text-center"
+          initial="hidden"
+          animate="visible"
+          variants={staggerContainer}
+        >
+          <motion.div
+            variants={fadeInUp}
+            transition={{ duration: 0.8 }}
+          >
+            <motion.div
+              animate={{ 
+                scale: [1, 1.02, 1],
+                opacity: [0.8, 1, 0.8]
+              }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+              style={{ display: 'inline-block' }}
+            >
+              <span className="badge bg-info text-dark px-4 py-2 mb-3" style={{ fontSize: '0.9rem', letterSpacing: '1px' }}>
+                INTELLIGENT SYSTEMS LAB
+              </span>
+            </motion.div>
+          </motion.div>
+          
+          <motion.h1 
+            className="display-4 fw-bold mb-4 text-white"
+            variants={fadeInUp}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            style={{ lineHeight: '1.3' }}
+          >
+            Tentang Laboratorium<br />
+            <span className="text-info">Sistem Cerdas</span>
+          </motion.h1>
+          
+          <motion.p 
+            className="lead text-white-50 m-auto mb-4" 
+            style={{ maxWidth: 800, fontSize: '1.1rem' }}
+            variants={fadeInUp}
+            transition={{ duration: 0.8, delay: 0.4 }}
+          >
+            Eksplorasi bidang <em className="text-info">Artificial Intelligence</em> di FILKOM UB—riset, edukasi, dan kolaborasi yang berdampak.
+          </motion.p>
+
+          <motion.div
+            variants={fadeInUp}
+            transition={{ duration: 0.8, delay: 0.6 }}
+          >
+            <div className="d-flex justify-content-center gap-3 flex-wrap">
+              <motion.div whileHover={{ y: -3 }} whileTap={{ scale: 0.95 }}>
+                <span className="badge bg-dark text-info px-3 py-2" style={{ fontSize: '0.85rem' }}>
+                  🤖 Machine Learning
+                </span>
+              </motion.div>
+              <motion.div whileHover={{ y: -3 }} whileTap={{ scale: 0.95 }}>
+                <span className="badge bg-dark text-info px-3 py-2" style={{ fontSize: '0.85rem' }}>
+                  🧠 Deep Learning
+                </span>
+              </motion.div>
+              <motion.div whileHover={{ y: -3 }} whileTap={{ scale: 0.95 }}>
+                <span className="badge bg-dark text-info px-3 py-2" style={{ fontSize: '0.85rem' }}>
+                  👁️ Computer Vision
+                </span>
+              </motion.div>
+              <motion.div whileHover={{ y: -3 }} whileTap={{ scale: 0.95 }}>
+                <span className="badge bg-dark text-info px-3 py-2" style={{ fontSize: '0.85rem' }}>
+                  💬 NLP
+                </span>
+              </motion.div>
+            </div>
+          </motion.div>
+        </motion.header>
       </section>
 
-      {/* SEKILAS */}
-      <section className="section section-dark pt-0">
+      {/* SEKILAS - Enhanced Layout */}
+      <section className="section section-dark py-5">
         <div className="container-xxl">
-          <h2 className="section-title text-center mb-4">Sekilas</h2>
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={fadeInUp}
+            transition={{ duration: 0.6 }}
+          >
+            <div className="text-center mb-5">
+              <motion.h2 
+                className="section-title mb-3"
+                style={{ fontSize: '2.5rem', fontWeight: '700' }}
+              >
+                Sekilas <span className="text-info">Tentang Kami</span>
+              </motion.h2>
+              <motion.div 
+                className="mx-auto mb-3"
+                style={{ 
+                  width: '80px', 
+                  height: '4px', 
+                  background: 'linear-gradient(90deg, transparent, #17a2b8, transparent)',
+                  borderRadius: '2px'
+                }}
+                initial={{ width: 0 }}
+                whileInView={{ width: 80 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: 0.3 }}
+              />
+            </div>
+          </motion.div>
 
-          <div className="row align-items-center g-4 about-intro">
-            <div className="col-lg-6">
-              <div className="about-card p-4 p-md-4">
-                <p className="mb-3 text-white">
+          <div className="row align-items-center g-5">
+            <motion.div 
+              className="col-lg-6"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.3 }}
+              variants={fadeInLeft}
+              transition={{ duration: 0.8 }}
+            >
+              <motion.div 
+                className="about-card p-4 p-md-5 h-100"
+                style={{ 
+                  background: 'rgba(23, 162, 184, 0.05)',
+                  border: '1px solid rgba(23, 162, 184, 0.2)',
+                  borderRadius: '20px',
+                  backdropFilter: 'blur(10px)'
+                }}
+                whileHover={{ 
+                  scale: 1.02,
+                  boxShadow: '0 20px 40px rgba(23, 162, 184, 0.15)',
+                  transition: { duration: 0.3 }
+                }}
+              >
+                <div className="d-flex align-items-center mb-4">
+                  <div 
+                    className="bg-info d-flex align-items-center justify-content-center me-3"
+                    style={{ 
+                      width: '50px', 
+                      height: '50px', 
+                      borderRadius: '12px',
+                      fontSize: '1.5rem'
+                    }}
+                  >
+                    🔬
+                  </div>
+                  <h3 className="text-info mb-0 fw-bold">Visi & Misi</h3>
+                </div>
+                
+                <p className="mb-4 text-white" style={{ lineHeight: '1.8', fontSize: '1rem' }}>
                   Laboratorium Sistem Cerdas merupakan salah satu laboratorium komputer yang memfokuskan diri pada bidang
-                  pengembangan sistem cerdas di Fakultas Ilmu Komputer Universitas Brawijaya (FILKOM UB). Laboratorium
-                  Sistem Cerdas terletak di Gedung F FILKOM UB. Adapun kegiatan yang dapat dilakukan di lingkup
+                  pengembangan sistem cerdas di Fakultas Ilmu Komputer Universitas Brawijaya (FILKOM UB).
+                </p>
+                
+                <p className="mb-4 text-white-50" style={{ lineHeight: '1.8', fontSize: '0.95rem' }}>
+                  Laboratorium Sistem Cerdas terletak di Gedung F FILKOM UB. Adapun kegiatan yang dapat dilakukan di lingkup
                   laboratorium Sistem Cerdas meliputi kegiatan praktikum, penggunaan ruang laboratorium, penggunaan
                   laboratorium untuk penelitian dan kerjasama penelitian, pengabdian masyarakat, praktik pembelajaran,
                   diskusi, simulasi, pengerjaan skripsi, sertifikasi atau sejenisnya.
                 </p>
-                <p className="mb-0 text-white">
-                  Fungsi utama dari laboratorium sebagai sarana untuk melakukan praktik atau penerapan atas teori,
-                  penelitian dan pengembangan keilmuan di lingkungan FILKOM UB, sehingga menjadi unsur penting dalam
-                  kegiatan pendidikan, pengabdian, dan penelitian.
-                </p>
-              </div>
-            </div>
-            <div className="col-lg-6">
-              <div className="about-photo shadow-lg rounded-4 overflow-hidden">
-                <img
-                  src="/assets/about/lab-room.jpg"
-                  alt="Ruang Laboratorium Sistem Cerdas"
-                  className="w-100 h-100"
-                  style={{objectFit: "cover"}}
+                
+                <div 
+                  className="p-3 rounded"
+                  style={{ 
+                    background: 'rgba(23, 162, 184, 0.1)',
+                    borderLeft: '4px solid #17a2b8'
+                  }}
+                >
+                  <p className="mb-0 text-white" style={{ fontSize: '0.95rem', lineHeight: '1.7' }}>
+                    <strong className="text-info">Fungsi utama:</strong> Sarana untuk melakukan praktik atau penerapan atas teori,
+                    penelitian dan pengembangan keilmuan di lingkungan FILKOM UB, sehingga menjadi unsur penting dalam
+                    kegiatan pendidikan, pengabdian, dan penelitian.
+                  </p>
+                </div>
+              </motion.div>
+            </motion.div>
+
+            <motion.div 
+              className="col-lg-6"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.3 }}
+              variants={fadeInRight}
+              transition={{ duration: 0.8 }}
+            >
+              <motion.div 
+                className="position-relative"
+                whileHover={{ scale: 1.03 }}
+                transition={{ duration: 0.3 }}
+              >
+                <div 
+                  className="about-photo shadow-lg overflow-hidden position-relative"
+                  style={{ 
+                    borderRadius: '24px',
+                    height: '450px'
+                  }}
+                >
+                  <motion.div
+                    className="position-absolute top-0 start-0 w-100 h-100"
+                    style={{ 
+                      background: 'linear-gradient(135deg, rgba(23, 162, 184, 0.3), transparent)',
+                      zIndex: 1
+                    }}
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 1 }}
+                  />
+                  <img
+                    src="/assets/about/lab-room.jpg"
+                    alt="Ruang Laboratorium Sistem Cerdas"
+                    className="w-100 h-100"
+                    style={{ objectFit: "cover" }}
+                  />
+                  
+                  {/* Floating badge */}
+                  <motion.div
+                    className="position-absolute bottom-0 start-0 m-4 p-3 rounded-3"
+                    style={{ 
+                      background: 'rgba(0, 0, 0, 0.8)',
+                      backdropFilter: 'blur(10px)',
+                      zIndex: 2,
+                      border: '1px solid rgba(23, 162, 184, 0.3)'
+                    }}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, delay: 0.5 }}
+                  >
+                    <p className="mb-1 text-info fw-bold" style={{ fontSize: '0.9rem' }}>📍 Lokasi</p>
+                    <p className="mb-0 text-white" style={{ fontSize: '0.85rem' }}>
+                      Gedung F, Lantai 9<br />FILKOM UB
+                    </p>
+                  </motion.div>
+                </div>
+                
+                {/* Decorative element */}
+                <motion.div
+                  className="position-absolute"
+                  style={{
+                    width: '100px',
+                    height: '100px',
+                    background: 'linear-gradient(135deg, #17a2b8, transparent)',
+                    borderRadius: '20px',
+                    top: '-20px',
+                    right: '-20px',
+                    zIndex: -1,
+                    opacity: 0.3
+                  }}
+                  animate={{
+                    rotate: [0, 360],
+                  }}
+                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
                 />
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           </div>
         </div>
       </section>
 
-      {/* KEPALA LAB */}
-      <section className="section section-dark pt-0">
+      {/* KEPALA LAB - Enhanced */}
+      <section className="section section-dark py-5">
         <div className="container-xxl">
-          <div className="about-head row g-4 align-items-center">
-            <div className="col-md-3 text-center">
-              <img
-                src="/assets/about/pakYudis.jpg"
-                alt="Dr.Eng. Novanto Yudistira"
-                className="rounded-circle shadow"
-                style={{width: 140, height: 140, objectFit: "cover"}}
-              />
-            </div>
-            <div className="col-md-9">
-              <h3 className="fw-extrabold mb-1 text-white">Kepala Laboratorium</h3>
-              <div className="about-underline mb-2" />
-              <p className="text-white-80 mb-1 text-white-50">Selamat datang di Laboratorium Sistem Cerdas</p>
-              <h4 className="mb-3 text-white">Dr.Eng. Novanto Yudistira, S.Kom., M.Sc.</h4>
-              <Link to="/anggota" className="btn btn-warning fw-semibold">
-                Sumber Daya Manusia
-                <span className="ms-2">➜</span>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* KONTAK & SOSIAL */}
-      <section className="section section-dark pt-0">
-        <div className="container-xxl">
-          <div className="row g-3">
-            <div className="col-md-4">
-              <div className="about-mini card-dark p-3 h-100">
-                <h6 className="text-info mb-2">Lokasi</h6>
-                <p className="mb-0 text-white-80">
-                  FILKOM Universitas Brawijaya<br />
-                  Gedung F — Lantai 9
+          <motion.div
+            className="about-head p-5 rounded-4"
+            style={{ 
+              background: 'linear-gradient(135deg, rgba(23, 162, 184, 0.1), rgba(23, 162, 184, 0.05))',
+              border: '1px solid rgba(23, 162, 184, 0.2)',
+              boxShadow: '0 10px 40px rgba(0, 0, 0, 0.3)'
+            }}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            variants={staggerContainer}
+          >
+            <div className="row g-4 align-items-center">
+              <motion.div 
+                className="col-md-3 text-center"
+                variants={scaleIn}
+                transition={{ duration: 0.8 }}
+              >
+                <motion.div
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <img
+                    src="/assets/about/pakYudis.jpg"
+                    alt="Dr.Eng. Novanto Yudistira"
+                    className="rounded-circle shadow-lg"
+                    style={{
+                      width: 180, 
+                      height: 180, 
+                      objectFit: "cover",
+                      border: '4px solid #17a2b8',
+                      padding: '4px',
+                      background: '#000'
+                    }}
+                  />
+                </motion.div>
+                <motion.div
+                  className="mt-3"
+                  variants={fadeInUp}
+                  transition={{ delay: 0.3 }}
+                >
+                  <span className="badge bg-info text-dark px-3 py-2">Kepala Laboratorium</span>
+                </motion.div>
+              </motion.div>
+              
+              <motion.div 
+                className="col-md-9"
+                variants={fadeInRight}
+                transition={{ duration: 0.8 }}
+              >
+                <motion.div
+                  initial={{ width: 0 }}
+                  whileInView={{ width: 60 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8, delay: 0.3 }}
+                  className="mb-3"
+                  style={{ 
+                    height: '4px', 
+                    background: '#17a2b8',
+                    borderRadius: '2px'
+                  }}
+                />
+                
+                <h3 className="fw-bold mb-2 text-white" style={{ fontSize: '1.3rem' }}>
+                  Selamat datang di Laboratorium Sistem Cerdas 👋
+                </h3>
+                
+                <h4 className="mb-3 text-info fw-bold" style={{ fontSize: '1.8rem' }}>
+                  Dr.Eng. Novanto Yudistira, S.Kom., M.Sc.
+                </h4>
+                
+                <p className="text-white-50 mb-4" style={{ lineHeight: '1.7', fontSize: '0.95rem' }}>
+                  Dengan dedikasi penuh, kami mengembangkan penelitian dan inovasi di bidang Artificial Intelligence
+                  untuk menciptakan solusi cerdas yang berdampak nyata bagi masyarakat.
                 </p>
-              </div>
+                
+                <motion.div
+                  whileHover={{ x: 5 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Link 
+                    to="/anggota" 
+                    className="btn btn-info fw-semibold px-4 py-2"
+                    style={{ 
+                      borderRadius: '10px',
+                      fontSize: '1rem',
+                      color: '#000'
+                    }}
+                  >
+                    Lihat Tim Kami
+                    <motion.span 
+                      className="ms-2"
+                      animate={{ x: [0, 5, 0] }}
+                      transition={{ duration: 1.5, repeat: Infinity }}
+                    >
+                      →
+                    </motion.span>
+                  </Link>
+                </motion.div>
+              </motion.div>
             </div>
+          </motion.div>
+        </div>
+      </section>
 
-            <div className="col-md-4">
-              <div className="about-mini card-dark p-3 h-100">
-                <h6 className="text-info mb-2">Email</h6>
-                <a href="mailto:labkc@ub.ac.id" className="text-white-80 text-decoration-none">labkc@ub.ac.id</a>
-              </div>
-            </div>
+      {/* KONTAK & SOSIAL - Enhanced Grid */}
+      <section className="section section-dark py-5">
+        <div className="container-xxl">
+          <motion.div
+            className="text-center mb-5"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeInUp}
+            transition={{ duration: 0.6 }}
+          >
+            <h2 className="section-title mb-2" style={{ fontSize: '2rem' }}>
+              Hubungi <span className="text-info">Kami</span>
+            </h2>
+            <p className="text-white-50">Mari terhubung dan berkolaborasi bersama</p>
+          </motion.div>
 
-            <div className="col-md-4">
-              <div className="about-mini card-dark p-3 h-100">
-                <h6 className="text-info mb-2">Instagram</h6>
-                <a
+          <motion.div 
+            className="row g-4"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={staggerContainer}
+          >
+            <motion.div 
+              className="col-md-4"
+              variants={fadeInUp}
+              transition={{ duration: 0.6 }}
+            >
+              <motion.div 
+                className="about-mini card-dark p-4 h-100 text-center"
+                style={{ 
+                  borderRadius: '16px',
+                  border: '1px solid rgba(23, 162, 184, 0.2)',
+                  background: 'rgba(23, 162, 184, 0.05)'
+                }}
+                whileHover={{ 
+                  y: -10,
+                  boxShadow: '0 20px 40px rgba(23, 162, 184, 0.2)',
+                  transition: { duration: 0.3 }
+                }}
+              >
+                <motion.div
+                  className="mb-3"
+                  whileHover={{ rotate: 360 }}
+                  transition={{ duration: 0.6 }}
+                >
+                  <div 
+                    className="bg-info d-inline-flex align-items-center justify-content-center"
+                    style={{ 
+                      width: '70px', 
+                      height: '70px', 
+                      borderRadius: '16px',
+                      fontSize: '2rem'
+                    }}
+                  >
+                    📍
+                  </div>
+                </motion.div>
+                <h5 className="text-info mb-3 fw-bold">Lokasi</h5>
+                <p className="mb-0 text-white" style={{ lineHeight: '1.8' }}>
+                  <strong>FILKOM Universitas Brawijaya</strong><br />
+                  Gedung F — Lantai 9<br />
+                  <span className="text-white-50 small">Malang, Jawa Timur</span>
+                </p>
+              </motion.div>
+            </motion.div>
+
+            <motion.div 
+              className="col-md-4"
+              variants={fadeInUp}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              <motion.div 
+                className="about-mini card-dark p-4 h-100 text-center"
+                style={{ 
+                  borderRadius: '16px',
+                  border: '1px solid rgba(23, 162, 184, 0.2)',
+                  background: 'rgba(23, 162, 184, 0.05)'
+                }}
+                whileHover={{ 
+                  y: -10,
+                  boxShadow: '0 20px 40px rgba(23, 162, 184, 0.2)',
+                  transition: { duration: 0.3 }
+                }}
+              >
+                <motion.div
+                  className="mb-3"
+                  whileHover={{ rotate: 360 }}
+                  transition={{ duration: 0.6 }}
+                >
+                  <div 
+                    className="bg-info d-inline-flex align-items-center justify-content-center"
+                    style={{ 
+                      width: '70px', 
+                      height: '70px', 
+                      borderRadius: '16px',
+                      fontSize: '2rem'
+                    }}
+                  >
+                    ✉️
+                  </div>
+                </motion.div>
+                <h5 className="text-info mb-3 fw-bold">Email</h5>
+                <motion.a 
+                  href="mailto:labkc@ub.ac.id" 
+                  className="text-white text-decoration-none d-block mb-2"
+                  style={{ fontSize: '1.1rem', fontWeight: '500' }}
+                  whileHover={{ scale: 1.05, color: '#17a2b8' }}
+                >
+                  labkc@ub.ac.id
+                </motion.a>
+                <p className="text-white-50 small mb-0">
+                  Untuk keperluan kolaborasi & informasi
+                </p>
+              </motion.div>
+            </motion.div>
+
+            <motion.div 
+              className="col-md-4"
+              variants={fadeInUp}
+              transition={{ duration: 0.6, delay: 0.4 }}
+            >
+              <motion.div 
+                className="about-mini card-dark p-4 h-100 text-center"
+                style={{ 
+                  borderRadius: '16px',
+                  border: '1px solid rgba(23, 162, 184, 0.2)',
+                  background: 'rgba(23, 162, 184, 0.05)'
+                }}
+                whileHover={{ 
+                  y: -10,
+                  boxShadow: '0 20px 40px rgba(23, 162, 184, 0.2)',
+                  transition: { duration: 0.3 }
+                }}
+              >
+                <motion.div
+                  className="mb-3"
+                  whileHover={{ rotate: 360 }}
+                  transition={{ duration: 0.6 }}
+                >
+                  <div 
+                    className="bg-info d-inline-flex align-items-center justify-content-center"
+                    style={{ 
+                      width: '70px', 
+                      height: '70px', 
+                      borderRadius: '16px',
+                      fontSize: '2rem'
+                    }}
+                  >
+                    📱
+                  </div>
+                </motion.div>
+                <h5 className="text-info mb-3 fw-bold">Social Media</h5>
+                <motion.a
                   href="https://instagram.com/is.lab.filkom"
                   target="_blank"
                   rel="noreferrer"
-                  className="btn btn-outline-info btn-sm"
+                  className="btn btn-info text-dark fw-semibold mb-2"
+                  style={{ borderRadius: '10px', width: '100%' }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
                   @is.lab.filkom
-                </a>
-                <p className="small text-white-50 mb-0 mt-2">
-                  Exploring the Frontiers of Artificial Intelligence
+                </motion.a>
+                <p className="small text-white-50 mb-0">
+                  Follow untuk update terbaru!
                 </p>
-              </div>
-            </div>
-          </div>
+              </motion.div>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 

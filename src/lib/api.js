@@ -89,11 +89,9 @@ export async function getCollaborations() {
 }
 
 export async function listCollaborationsAdmin({ page = 1, perPage = 10, q = "" } = {}) {
-  const u = new URL(`${API_BASE}/collaborations/admin`);
-  u.searchParams.set("page", page);
-  u.searchParams.set("perPage", perPage);
-  if (q) u.searchParams.set("q", q);
-  const r = await fetch(u);
+  const params = new URLSearchParams({ page, perPage });
+  if (q) params.set("q", q);
+  const r = await fetch(`${API_BASE}/collaborations/admin?${params}`);
   const j = await r.json();
   if (!r.ok) throw new Error(j.error || "Gagal memuat kolaborasi");
   return j; // {data, count, page, perPage}
@@ -138,7 +136,7 @@ export async function deleteCollaboration(id) {
 export async function uploadCollabLogo(file) {
   const fd = new FormData();
   fd.append("file", file);
-  const r = await fetch(`${API_BASE}/uploads/collab/logo`, { method: "POST", body: fd });
+  const r = await fetch(`/uploads/collab/logo`, { method: "POST", body: fd }); // ⬅️ tanpa API_BASE
   const j = await r.json();
   if (!r.ok) throw new Error(j.error || "Gagal mengunggah logo");
   return j; // { url, filename }

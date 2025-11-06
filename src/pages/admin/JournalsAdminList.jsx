@@ -37,6 +37,7 @@ export default function JournalsAdminList() {
   }
 
   return (
+    <AdminGate>
     <section className="section section-dark">
       <div className="container">
         <div className="d-flex justify-content-between align-items-center mb-4">
@@ -46,7 +47,6 @@ export default function JournalsAdminList() {
         </div>
 
         {err && <p className="text-danger">{err}</p>}
-        <AdminGate>
         <div className="card card-dark p-3">
           <div className="table-responsive">
             <table className="table table-dark table-hover align-middle mb-0">
@@ -114,8 +114,8 @@ export default function JournalsAdminList() {
         </div>
 
         {loading && <p className="mt-3 text-white-80">Memuat…</p>}
-        </AdminGate>
       </div>
     </section>
+    </AdminGate>
   );
 }

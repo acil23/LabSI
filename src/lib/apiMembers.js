@@ -9,7 +9,7 @@ export async function listMembers({ page = 1, perPage = 6, filters = {} } = {}) 
   if (filters.position) params.set('position', filters.position);
   if (filters.faculty)  params.set('faculty',  filters.faculty);
   if (filters.program)  params.set('program',  filters.program);
-  if (filters.q)        params.set('search',   filters.q);
+  if (filters.q)        params.set('q',        filters.q); // ⬅️ backend pakai "q", bukan "search"
 
   return http.get(`/members?${params.toString()}`);
 }
@@ -19,6 +19,7 @@ export function getMemberDetailBySlug(slug) {
   return http.get(`/members/${slug}`);
 }
 
+// Upload avatar (FormData: file + optional slug)
 export function uploadAvatar(file, slug) {
   const fd = new FormData();
   fd.append('file', file);
@@ -27,6 +28,6 @@ export function uploadAvatar(file, slug) {
 }
 
 // (untuk admin nanti)
-export const createMember = (payload)        => http.post(`/members`, payload);
-export const updateMember = (slug, payload)  => http.patch(`/members/${slug}`, payload);
-export const deleteMember = (slug)           => http.del(`/members/${slug}`);
+export const createMember        = (payload)        => http.post(`/members`, payload);
+export const updateMember        = (slug, payload)  => http.patch(`/members/${slug}`, payload);
+export const deleteMember        = (slug)           => http.del(`/members/${slug}`);

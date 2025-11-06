@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { getJournals } from "../lib/api";
 import { asAbsolute } from "../lib/http";
+import { motion, AnimatePresence } from "framer-motion";
 
 const LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 const VIEW_PER_PAGE = 8;
@@ -46,13 +47,13 @@ export default function JurnalIndex() {
     return Array.from(years).sort((a, b) => b - a);
   }, [rawItems]);
 
-  // Ambil daftar tipe unik (Journal, Conference, dsb.)
+  // Ambil daftar tipe unik
   const availableTypes = useMemo(() => {
     const types = new Set((rawItems || []).map((it) => it.type).filter(Boolean));
     return Array.from(types);
   }, [rawItems]);
 
-  // Filter berdasarkan query, letter, year, type
+  // Filter
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
 
@@ -117,10 +118,59 @@ export default function JurnalIndex() {
     syncURL({ q: query, letter, year, type, page: next });
   };
 
+  // Animation variants
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0 }
+  };
+
+  const staggerContainer = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const cardVariant = {
+    hidden: { opacity: 0, scale: 0.95, y: 20 },
+    visible: { 
+      opacity: 1, 
+      scale: 1, 
+      y: 0,
+      transition: { duration: 0.4 }
+    },
+    exit: { 
+      opacity: 0, 
+      scale: 0.95,
+      transition: { duration: 0.3 }
+    }
+  };
+
   if (loading) {
     return (
-      <section className="section section-dark text-center">
-        <p className="text-white-80">Memuat data jurnal...</p>
+      <section className="section section-dark text-center" style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+        >
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+            style={{ display: 'inline-block' }}
+          >
+            <div 
+              className="spinner-border text-info" 
+              role="status"
+              style={{ width: '3rem', height: '3rem' }}
+            >
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </motion.div>
+          <p className="text-white-50 mt-3">Memuat data jurnal...</p>
+        </motion.div>
       </section>
     );
   }
@@ -128,7 +178,13 @@ export default function JurnalIndex() {
   if (err) {
     return (
       <section className="section section-dark text-center">
-        <p className="text-danger">{err}</p>
+        <motion.p 
+          className="text-danger"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+        >
+          {err}
+        </motion.p>
       </section>
     );
   }
@@ -136,172 +192,348 @@ export default function JurnalIndex() {
   return (
     <section className="section section-dark">
       <div className="container">
-        <h2 className="text-center text-light mb-4">
-          Daftar Publikasi Jurnal & Konferensi
-        </h2>
+        {/* Header */}
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={fadeInUp}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-5"
+        >
+          <motion.div
+            className="d-inline-block mb-3"
+            animate={{ 
+              scale: [1, 1.05, 1],
+              opacity: [0.8, 1, 0.8]
+            }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <span className="badge bg-info text-dark px-4 py-2" style={{ fontSize: '0.9rem', letterSpacing: '1px' }}>
+              📚 PUBLICATIONS
+            </span>
+          </motion.div>
+          
+          <h2 className="section-title mb-3" style={{ fontSize: '2.5rem' }}>
+            Publikasi <span className="text-info">Jurnal & Konferensi</span>
+          </h2>
+          
+          <motion.div 
+            className="mx-auto"
+            style={{ 
+              width: '80px', 
+              height: '4px', 
+              background: 'linear-gradient(90deg, transparent, #17a2b8, transparent)',
+              borderRadius: '2px'
+            }}
+            initial={{ width: 0 }}
+            animate={{ width: 80 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+          />
+          
+          <motion.p 
+            className="text-white-50 mt-3"
+            variants={fadeInUp}
+            transition={{ delay: 0.2 }}
+          >
+            Hasil penelitian dan karya ilmiah kami
+          </motion.p>
+        </motion.div>
 
         {/* 🔍 Filter Section */}
-        <div className="card card-dark p-3 mb-4">
+        <motion.div 
+          className="card card-dark p-4 mb-5"
+          style={{ 
+            borderRadius: '20px',
+            border: '1px solid rgba(23, 162, 184, 0.2)',
+            background: 'rgba(23, 162, 184, 0.05)'
+          }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
           <form onSubmit={onSearchSubmit}>
-            <div className="row g-2 align-items-center mb-3">
-              <div className="col-md-6">
-                <input
-                  className="form-control"
+            <div className="row g-3 align-items-center mb-4">
+              <div className="col-md-5">
+                <label className="small text-info mb-2 d-block fw-semibold">🔍 Cari Publikasi</label>
+                <motion.input
+                  className="form-control bg-dark text-light border-secondary"
+                  style={{ borderRadius: '10px' }}
                   placeholder="Cari judul atau penulis..."
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
+                  whileFocus={{ scale: 1.02, borderColor: '#17a2b8' }}
                 />
               </div>
               <div className="col-md-2">
-                <select
-                  className="form-select"
+                <label className="small text-info mb-2 d-block fw-semibold">📅 Tahun</label>
+                <motion.select
+                  className="form-select bg-dark text-light border-secondary"
+                  style={{ borderRadius: '10px' }}
                   value={year}
                   onChange={(e) => setYear(e.target.value)}
+                  whileFocus={{ scale: 1.02, borderColor: '#17a2b8' }}
                 >
                   <option value="">Semua Tahun</option>
                   {availableYears.map((y) => (
-                    <option key={y} value={y}>
-                      {y}
-                    </option>
+                    <option key={y} value={y}>{y}</option>
                   ))}
-                </select>
+                </motion.select>
               </div>
               <div className="col-md-2">
-                <select
-                  className="form-select"
+                <label className="small text-info mb-2 d-block fw-semibold">📝 Tipe</label>
+                <motion.select
+                  className="form-select bg-dark text-light border-secondary"
+                  style={{ borderRadius: '10px' }}
                   value={type}
                   onChange={(e) => setType(e.target.value)}
+                  whileFocus={{ scale: 1.02, borderColor: '#17a2b8' }}
                 >
                   <option value="">Semua Tipe</option>
                   {availableTypes.map((t) => (
-                    <option key={t} value={t}>
-                      {t}
-                    </option>
+                    <option key={t} value={t}>{t}</option>
                   ))}
-                </select>
+                </motion.select>
               </div>
-              <div className="col-md-2 d-flex gap-2">
-                <button type="submit" className="btn btn-info w-100">
+              <div className="col-md-3 d-flex gap-2 align-items-end">
+                <motion.button 
+                  type="submit" 
+                  className="btn btn-info text-dark fw-semibold flex-grow-1"
+                  style={{ borderRadius: '10px', marginTop: 'auto' }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
                   Cari
-                </button>
-              </div>
-              <div>
-                <button
+                </motion.button>
+                <motion.button
                   type="button"
                   className="btn btn-outline-light"
+                  style={{ borderRadius: '10px' }}
                   onClick={onReset}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
                   Reset
-                </button>
+                </motion.button>
               </div>
             </div>
           </form>
 
           {/* 🔤 Filter A–Z */}
-          <div className="d-flex flex-wrap gap-2">
-            <button
-              type="button"
-              className={`btn ${!letter ? "btn-info" : "btn-outline-info"}`}
-              onClick={() => onPickLetter("")}
-            >
-              Semua
-            </button>
-            {LETTERS.map((ch) => (
-              <button
-                key={ch}
+          <div>
+            <label className="small text-info mb-2 d-block fw-semibold">🔤 Filter Abjad</label>
+            <div className="d-flex flex-wrap gap-2">
+              <motion.button
                 type="button"
-                className={`btn rounded-pill ${
-                  letter === ch ? "btn-info" : "btn-outline-info"
-                }`}
-                style={{ minWidth: 44 }}
-                onClick={() => onPickLetter(ch)}
+                className={`btn ${!letter ? "btn-info text-dark" : "btn-outline-info"}`}
+                style={{ borderRadius: '8px', minWidth: '50px' }}
+                onClick={() => onPickLetter("")}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
               >
-                {ch}
-              </button>
-            ))}
+                All
+              </motion.button>
+              {LETTERS.map((ch) => (
+                <motion.button
+                  key={ch}
+                  type="button"
+                  className={`btn ${letter === ch ? "btn-info text-dark" : "btn-outline-info"}`}
+                  style={{ minWidth: 40, borderRadius: '8px' }}
+                  onClick={() => onPickLetter(ch)}
+                  whileHover={{ scale: 1.1, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  {ch}
+                </motion.button>
+              ))}
+            </div>
           </div>
-        </div>
+
+          {/* Active filters */}
+          {(query || letter || year || type) && (
+            <motion.div 
+              className="mt-3 p-3 rounded"
+              style={{ background: 'rgba(23, 162, 184, 0.1)' }}
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              transition={{ duration: 0.3 }}
+            >
+              <small className="text-info fw-semibold">Filter aktif: </small>
+              <span className="text-white">{filtered.length} hasil ditemukan</span>
+            </motion.div>
+          )}
+        </motion.div>
 
         {/* 📄 Daftar Jurnal */}
-        <div className="row">
-          {pagedItems.map((j) => (
-            <div className="col-md-6 mb-4" key={j.slug}>
-              <div className="card card-dark h-100">
-                {j.thumb_url && (
-                  <img
-                    src={asAbsolute(j.thumb_url)}
-                    alt={j.title}
-                    className="img-fluid rounded-top"
-                    style={{ maxHeight: 200, objectFit: "cover" }}
-                  />
-                )}
-                <div className="card-body">
-                  <h4 className="text-light mb-2">{j.title}</h4>
-                  <p className="text-white-80 mb-1">{j.authors}</p>
-                  <p className="text-info mb-2">
-                    {j.venue} • {j.year} ({j.type})
-                  </p>
-                  <div className="d-flex gap-2">
-                    <Link
-                      to={`/jurnal/${j.slug}`}
-                      className="btn btn-outline-info btn-sm"
+        <AnimatePresence mode="wait">
+          <motion.div 
+            className="row"
+            key={currentPage}
+            variants={staggerContainer}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+          >
+            {pagedItems.map((j, index) => (
+              <motion.div 
+                className="col-md-6 mb-4" 
+                key={j.slug}
+                variants={cardVariant}
+                custom={index}
+              >
+                <motion.div 
+                  className="card card-dark h-100"
+                  style={{ 
+                    borderRadius: '16px',
+                    border: '1px solid rgba(23, 162, 184, 0.2)',
+                    background: 'rgba(23, 162, 184, 0.03)',
+                    overflow: 'hidden'
+                  }}
+                  whileHover={{ 
+                    y: -8,
+                    boxShadow: '0 20px 40px rgba(23, 162, 184, 0.2)',
+                    borderColor: 'rgba(23, 162, 184, 0.4)',
+                    transition: { duration: 0.3 }
+                  }}
+                >
+                  {j.thumb_url && (
+                    <motion.div
+                      className="overflow-hidden"
+                      whileHover={{ scale: 1.05 }}
+                      transition={{ duration: 0.3 }}
                     >
-                      Baca Detail
-                    </Link>
-                    {j.pdf_url && (
-                      <a
-                        href={asAbsolute(j.pdf_url)}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="btn btn-info btn-sm"
+                      <img
+                        src={asAbsolute(j.thumb_url)}
+                        alt={j.title}
+                        className="img-fluid w-100"
+                        style={{ maxHeight: 200, objectFit: "cover" }}
+                      />
+                    </motion.div>
+                  )}
+                  <div className="card-body">
+                    <h4 className="text-light mb-2" style={{ fontSize: '1.1rem', lineHeight: '1.4' }}>
+                      {j.title}
+                    </h4>
+                    <p className="text-white-80 mb-2 small">{j.authors}</p>
+                    <div className="d-flex flex-wrap gap-2 mb-3">
+                      <span className="badge bg-info text-dark">
+                        📅 {j.year}
+                      </span>
+                      <span className="badge bg-dark text-info">
+                        {j.type}
+                      </span>
+                    </div>
+                    <p className="text-white-50 small mb-3">{j.venue}</p>
+                    <div className="d-flex gap-2">
+                      <motion.div
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
                       >
-                        ⬇️ Download PDF
-                      </a>
-                    )}
+                        <Link
+                          to={`/jurnal/${j.slug}`}
+                          className="btn btn-outline-info btn-sm"
+                          style={{ borderRadius: '8px' }}
+                        >
+                          Baca Detail
+                        </Link>
+                      </motion.div>
+                      {j.pdf_url && (
+                        <motion.div
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                        >
+                          <a
+                            href={asAbsolute(j.pdf_url)}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="btn btn-info btn-sm text-dark"
+                            style={{ borderRadius: '8px' }}
+                          >
+                            ⬇️ PDF
+                          </a>
+                        </motion.div>
+                      )}
+                    </div>
                   </div>
-                </div>
-              </div>
-            </div>
-          ))}
+                </motion.div>
+              </motion.div>
+            ))}
 
-          {!pagedItems.length && (
-            <div className="col-12">
-              <div className="card card-dark p-4 text-center">
-                <p className="text-white-80 m-0">
-                  Tidak ada hasil untuk filter saat ini.
-                </p>
-              </div>
-            </div>
-          )}
-        </div>
+            {!pagedItems.length && (
+              <motion.div 
+                className="col-12"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+              >
+                <div 
+                  className="text-center py-5"
+                  style={{ 
+                    background: 'rgba(23, 162, 184, 0.05)',
+                    borderRadius: '16px',
+                    border: '1px dashed rgba(23, 162, 184, 0.3)'
+                  }}
+                >
+                  <div style={{ fontSize: '3rem' }}>🔍</div>
+                  <h5 className="text-white-50 mt-3">Tidak ada hasil</h5>
+                  <p className="text-white-50 small">Coba ubah filter atau kata kunci pencarian</p>
+                </div>
+              </motion.div>
+            )}
+          </motion.div>
+        </AnimatePresence>
 
         {/* 🔢 Pagination */}
         {totalPages > 1 && (
-          <nav aria-label="Page navigation example">
-            <ul className="pagination justify-content-center mt-4">
-              <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
-                <button className="page-link" onClick={() => go(currentPage - 1)}>
-                  Previous
+          <motion.nav 
+            aria-label="Page navigation"
+            className="mt-5"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            <ul className="pagination justify-content-center">
+              <motion.li 
+                className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
+                whileHover={currentPage !== 1 ? { scale: 1.05 } : {}}
+              >
+                <button 
+                  className="page-link bg-dark text-info border-secondary"
+                  onClick={() => go(currentPage - 1)}
+                  style={{ borderRadius: '8px 0 0 8px' }}
+                >
+                  ← Previous
                 </button>
-              </li>
+              </motion.li>
+              
               {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-                <li key={p} className={`page-item ${p === currentPage ? "active" : ""}`}>
-                  <button className="page-link" onClick={() => go(p)}>
+                <motion.li 
+                  key={p} 
+                  className={`page-item ${p === currentPage ? "active" : ""}`}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <button 
+                    className={`page-link ${p === currentPage ? 'bg-info text-dark border-info' : 'bg-dark text-light border-secondary'}`}
+                    onClick={() => go(p)}
+                  >
                     {p}
                   </button>
-                </li>
+                </motion.li>
               ))}
-              <li
-                className={`page-item ${
-                  currentPage === totalPages ? "disabled" : ""
-                }`}
+              
+              <motion.li 
+                className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}
+                whileHover={currentPage !== totalPages ? { scale: 1.05 } : {}}
               >
-                <button className="page-link" onClick={() => go(currentPage + 1)}>
-                  Next
+                <button 
+                  className="page-link bg-dark text-info border-secondary"
+                  onClick={() => go(currentPage + 1)}
+                  style={{ borderRadius: '0 8px 8px 0' }}
+                >
+                  Next →
                 </button>
-              </li>
+              </motion.li>
             </ul>
-          </nav>
+          </motion.nav>
         )}
       </div>
     </section>

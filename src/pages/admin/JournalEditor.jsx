@@ -113,13 +113,14 @@ export default function JournalEditor() {
   }
 
   return (
+    <AdminGate>
     <section className="section section-dark">
       <div className="container">
         <div className="d-flex justify-content-between align-items-center mb-3">
+          <Link to="/admin/jurnal" className="btn btn-warning">Kembali</Link>
           <h2 className="text-light m-0">{isEdit ? "Ubah Jurnal" : "Tambah Jurnal"}</h2>
-          <Link to="/admin/jurnal" className="btn btn-outline-light btn-sm">← Kembali</Link>
+          <Link to="/admin" className="btn btn-secondary">Home (Admin)</Link>
         </div>
-        <AdminGate>
         <form onSubmit={onSubmit} className="card card-dark p-3">
           <div className="row g-3">
             <div className="col-md-8">
@@ -255,8 +256,8 @@ export default function JournalEditor() {
             <Link to="/admin/jurnal" className="btn btn-outline-light">Batal</Link>
           </div>
         </form>
-        </AdminGate>
       </div>
     </section>
+    </AdminGate>
   );
 }

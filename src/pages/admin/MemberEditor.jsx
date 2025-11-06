@@ -5,11 +5,10 @@ import {
   getMemberDetailBySlug,
   createMember,
   updateMember,
-  uploadAvatar,
 } from "../../lib/apiMembers";
-import { API_BASE } from "../../lib/http";
-
-const asAbsolute = (u) => (!u ? "" : (u.startsWith("http") ? u : `${API_BASE}${u}`));
+import { Link } from "react-router-dom";
+import { API_BASE, asAbsolute } from "../../lib/http";
+import { uploadWithProgress } from "../../lib/uploadProgress";
 
 const toCSV = (arr) => (arr || []).join(", ");
 const fromCSV = (s) =>
@@ -20,18 +19,14 @@ const fromCSV = (s) =>
 
 function RowActions({ text = "+ Tambah", onAdd }) {
   return (
-    <button
-      type="button"
-      className="btn btn-sm btn-outline-light"
-      onClick={onAdd}
-    >
+    <button type="button" className="btn btn-sm btn-outline-light" onClick={onAdd}>
       {text}
     </button>
   );
 }
 
 export default function MemberEditor() {
-  const { slug } = useParams(); // undefined kalau create
+  const { slug } = useParams();
   const isEdit = Boolean(slug);
   const nav = useNavigate();
 
@@ -56,19 +51,39 @@ export default function MemberEditor() {
     socials: [],
   });
 
+  // ⬇️ state upload HARUS DI DALAM KOMPONEN
   const [uploading, setUploading] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [localPreview, setLocalPreview] = useState("");
+
+  function updateField(k, v) {
+    setForm((prev) => ({ ...prev, [k]: v }));
+  }
 
   async function onPickFile(e) {
     const file = e.target.files?.[0];
     if (!file) return;
+
+    const tempUrl = URL.createObjectURL(file);
+    setLocalPreview(tempUrl);
+    setUploading(true);
+    setProgress(0);
+
     try {
-      setUploading(true);
-      const { url } = await uploadAvatar(file, form.slug || "temp");
-      updateField("avatar_url", url); // set langsung ke form
+      const data = await uploadWithProgress({
+        url: `${API_BASE}/uploads/avatar`,           // avatar via /api
+        file,
+        fields: { slug: form.slug || "member" },
+        onProgress: setProgress,
+      });
+      updateField("avatar_url", data.url);           // "/uploads/avatars/....png"
     } catch (err) {
-      alert(err.message);
+      alert(err.message || "Upload gagal");
     } finally {
       setUploading(false);
+      setTimeout(() => URL.revokeObjectURL(tempUrl), 1000);
+      e.target.value = "";
+      setLocalPreview("");                           // langsung pakai URL final
     }
   }
 
@@ -89,15 +104,9 @@ export default function MemberEditor() {
           email: m.email || "",
           avatar_url: m.avatar_url || "",
           bio: m.bio || "",
-          specialistsCSV: toCSV(
-            (m.member_specialists || [])
-              .map((ms) => ms.spec?.name)
-              .filter(Boolean)
-          ),
+          specialistsCSV: toCSV((m.member_specialists || []).map((ms) => ms.spec?.name).filter(Boolean)),
           skillsCSV: toCSV((m.skills || []).map((s) => s.skill_name)),
-          certificationsCSV: toCSV(
-            (m.certifications || []).map((c) => c.cert_name)
-          ),
+          certificationsCSV: toCSV((m.certifications || []).map((c) => c.cert_name)),
           experiences: m.experiences || [],
           educations: m.educations || [],
           socials: m.socials || [],
@@ -109,10 +118,6 @@ export default function MemberEditor() {
       }
     })();
   }, [slug, isEdit]);
-
-  function updateField(k, v) {
-    setForm((prev) => ({ ...prev, [k]: v }));
-  }
 
   async function onSubmit(e) {
     e.preventDefault();
@@ -134,44 +139,30 @@ export default function MemberEditor() {
         educations: form.educations,
         socials: form.socials,
       };
-      if (isEdit) {
-        // slug di URL sebagai target
-        await updateMember(slug, payload);
-      } else {
-        await createMember(payload);
-      }
+      if (isEdit) await updateMember(slug, payload);
+      else await createMember(payload);
       nav("/admin/anggota");
     } catch (e) {
       setErr(e.message);
     }
   }
 
-  const addExp = () =>
-    updateField("experiences", [
-      ...form.experiences,
-      { role: "", org: "", period: "", bullets: [] },
-    ]);
-  const addEdu = () =>
-    updateField("educations", [
-      ...form.educations,
-      { degree: "", org: "", year: "", note: "" },
-    ]);
-  const addSoc = () =>
-    updateField("socials", [...form.socials, { type: "linkedin", url: "" }]);
+  const addExp = () => updateField("experiences", [...form.experiences, { role: "", org: "", period: "", bullets: [] }]);
+  const addEdu = () => updateField("educations", [...form.educations, { degree: "", org: "", year: "", note: "" }]);
+  const addSoc = () => updateField("socials", [...form.socials, { type: "linkedin", url: "" }]);
 
-  if (loading)
-    return (
-      <section className="section section-dark">
-        <p>Loading…</p>
-      </section>
-    );
+  if (loading) return (<section className="section section-dark"><p>Loading…</p></section>);
 
   return (
+    <AdminGate>
     <section className="section section-dark">
-      <h2 className="section-title mb-3">
-        {isEdit ? "Edit" : "Tambah"} Anggota
-      </h2>
-      <AdminGate>
+      <div className="d-flex justify-content-between align-items-center mb-3">
+        <Link to="/admin/anggota" className="btn btn-warning">Kembali</Link>
+        <h2 className="section-title mb-3">
+          {isEdit ? "Edit" : "Tambah"} Anggota
+        </h2>
+        <Link to="/admin" className="btn btn-secondary">Home (Admin)</Link>
+      </div>
         {err && <p className="text-danger">{err}</p>}
         <form onSubmit={onSubmit} className="card card-dark p-3">
           <div className="row g-3">
@@ -244,26 +235,36 @@ export default function MemberEditor() {
                   value={form.avatar_url}
                   onChange={(e) => updateField("avatar_url", e.target.value)}
                   placeholder="https://..."
+                  disabled={uploading}
                 />
                 <label className="btn btn-outline-light mb-0">
-                  {uploading ? "Uploading..." : "Upload"}
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={onPickFile}
-                    hidden
-                  />
+                  {uploading ? (
+                    <>
+                      <span className="spinner-border spinner-border-sm me-2" />
+                      Uploading {progress}%
+                    </>
+                  ) : "Upload"}
+                  <input type="file" accept="image/*" onChange={onPickFile} hidden />
                 </label>
               </div>
-              {form.avatar_url && (
+
+              {uploading && (
+                <div className="progress mt-2" style={{height: 6}}>
+                  <div className="progress-bar" role="progressbar" style={{width: `${progress}%`}} />
+                </div>
+              )}
+
+              {(localPreview || form.avatar_url) && (
                 <div className="mt-2">
                   <img
-                    src={asAbsolute(form.avatar_url)}   // <= pakai prefix
                     alt="preview"
+                    src={localPreview || asAbsolute(form.avatar_url)}
                     style={{ width:120, height:120, objectFit:"cover", borderRadius:"50%" }}
+                    onError={(e)=>{ e.currentTarget.style.display='none'; }}
                   />
                 </div>
               )}
+
             </div>
 
             <div className="col-md-6">
@@ -525,7 +526,7 @@ export default function MemberEditor() {
             </button>
           </div>
         </form>
-      </AdminGate>
     </section>
+    </AdminGate>
   );
 }

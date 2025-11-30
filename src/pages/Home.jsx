@@ -7,8 +7,11 @@ import { getCollaborations } from "../lib/api";
 import CollabMarquee from "../components/CollabMarquee";
 import heroImage from "../../public/assets/gambar/hero-image.png";
 import { motion } from 'framer-motion';
+import { useLanguage } from "../contexts/LanguageContext";
+import { t } from "../translations/translations";
 
 function Home() {
+  const { lang } = useLanguage();
   // Berita
   const [newsTop, setNewsTop] = useState([]);
   const [newsList, setNewsList] = useState([]);
@@ -173,7 +176,7 @@ function Home() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.2 }}
                   >
-                    <h1>Exploring the Frontiers of Artificial Intelligence</h1>
+                    <h1>{t(lang, 'home.hero_title')}</h1>
                   </motion.div>
                   <motion.p 
                     className="lead mt-3"
@@ -181,7 +184,7 @@ function Home() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.4 }}
                   >
-                    Our lab is a hub for pioneering research and real-world applications, where we're dedicated to reshaping the landscape of smart technology. From transformative projects to strategic collaborations, we're set to make a significant mark in the world of IT.
+                    {t(lang, 'home.hero_desc')}
                   </motion.p>
                   <br />
                   <motion.p
@@ -189,7 +192,7 @@ function Home() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.6 }}
                   >
-                    Whether you're into AI, machine learning, NLP, CV, or just curious — this is where you belong.
+                    {t(lang, 'home.hero_tagline')}
                   </motion.p>
                 </div>
               </div>
@@ -225,13 +228,13 @@ function Home() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <Link to="https://www.instagram.com/is.lab.filkom/" className="btn btn-primary btn-lg">Join Us</Link>
+                  <Link to="https://www.instagram.com/is.lab.filkom/" className="btn btn-primary btn-lg">{t(lang, 'home.btn_join')}</Link>
                 </motion.div>
                 <motion.div
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <Link to="/about" className="btn btn-outline-light btn-lg">More...</Link>
+                  <Link to="/about" className="btn btn-outline-light btn-lg">{t(lang, 'home.btn_more')}</Link>
                 </motion.div>
               </motion.div>
             </div>
@@ -252,15 +255,15 @@ function Home() {
           className="d-flex justify-content-between align-items-center mb-3"
           variants={fadeInUp}
         >
-          <h2 className="section-title m-0">Face Of IS Lab</h2>
+          <h2 className="section-title m-0">{t(lang, 'home.face_title')}</h2>
           <motion.div whileHover={{ x: 5 }} transition={{ duration: 0.2 }}>
             <Link to="/anggota" className="btn btn-outline-info btn-sm">
-              Lihat Semua →
+              {t(lang, 'home.view_all')} →
             </Link>
           </motion.div>
         </motion.div>
 
-        {loadingMembers && <p className="text-white-80">Memuat anggota...</p>}
+        {loadingMembers && <p className="text-white-80">{t(lang, 'home.loading_members')}</p>}
         {errMembers && <p className="text-danger">{errMembers}</p>}
 
         <motion.div 
@@ -314,10 +317,10 @@ function Home() {
           className="d-flex justify-content-between align-items-center mb-3"
           variants={fadeInUp}
         >
-          <h2 className="section-title m-0">Berita & Acara</h2>
+          <h2 className="section-title m-0">{t(lang, 'home.news_title')}</h2>
           <motion.div whileHover={{ x: 5 }} transition={{ duration: 0.2 }}>
             <Link to="/berita" className="btn btn-outline-info btn-sm">
-              Lihat semua →
+              {t(lang, 'home.view_all')} →
             </Link>
           </motion.div>
         </motion.div>
@@ -328,7 +331,7 @@ function Home() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
           >
-            <span className="text-white-80">Memuat berita…</span>
+            <span className="text-white-80">{t(lang, 'home.loading_news')}</span>
           </motion.div>
         )}
 
@@ -386,7 +389,7 @@ function Home() {
                               to={`/berita/${n.slug}`}
                               className="text-info fw-bold text-decoration-none"
                             >
-                              read more...
+                              {t(lang, 'home.read_more')}
                             </Link>
                           </motion.div>
                         </div>
@@ -396,7 +399,7 @@ function Home() {
                 </motion.div>
               ))}
               {!newsTop.length && (
-                <p className="text-center text-white-80">Belum ada berita.</p>
+                <p className="text-center text-white-80">{t(lang, 'home.no_news')}.</p>
               )}
             </motion.div>
 
@@ -456,7 +459,7 @@ function Home() {
           className="section-title text-center mb-3"
           variants={fadeInUp}
         >
-          Our Collaborations
+          {t(lang, 'home.collab_title')}
         </motion.h2>
 
         {loadingCollab && (
@@ -465,7 +468,7 @@ function Home() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
           >
-            <span className="text-white-80">Memuat kolaborasi…</span>
+            <span className="text-white-80">{t(lang, 'home.loading_collab')}</span>
           </motion.div>
         )}
 
@@ -496,7 +499,7 @@ function Home() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
           >
-            <span className="text-white-80">Belum ada data kolaborasi.</span>
+            <span className="text-white-80">{t(lang, 'home.no_collab')}</span>
           </motion.div>
         )}
       </motion.section>

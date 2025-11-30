@@ -6,7 +6,6 @@ import AnggotaIndex from "./pages/AnggotaIndex";
 import AnggotaDetail from "./pages/AnggotaDetail";
 import BeritaIndex from "./pages/BeritaIndex";
 import BeritaDetail from "./pages/BeritaDetail";
-import Kontak from "./pages/Kontak";
 import AdminHome from "./pages/admin/AdminHome";
 import MembersAdminList from "./pages/admin/MembersAdminList";
 import MemberEditor from "./pages/admin/MemberEditor";
@@ -21,17 +20,18 @@ import CollabAdminList from "./pages/admin/CollabAdminList";
 import CollabEditor from "./pages/admin/CollabEditor";
 import PageTransition from './components/PageTransition';
 import './components/transitions.css';
+import { LanguageProvider } from './contexts/LanguageContext';
 
 export default function App() {
   return (
     <PageTransition>
+    <LanguageProvider>
     <Routes>
       <Route path="/" element={<Layout><Home /></Layout>} />
       <Route path="anggota" element={<Layout><AnggotaIndex /></Layout>} />
       <Route path="anggota/:slug" element={<Layout><AnggotaDetail /></Layout>} />
       <Route path="berita" element={<Layout><BeritaIndex /></Layout>} />
       <Route path="berita/:slug" element={<Layout><BeritaDetail /></Layout>} />
-      <Route path="kontak" element={<Layout><Kontak /></Layout>} />
       <Route path="admin" element={<AdminHome />} />
       <Route path="admin/anggota" element={<Layout><MembersAdminList /></Layout>} />
       <Route path="admin/anggota/new" element={<Layout><MemberEditor /></Layout>} />
@@ -50,6 +50,7 @@ export default function App() {
       <Route path="admin/kolaborasi/:id/edit" element={<Layout><CollabEditor /></Layout>} />
       <Route path="*" element={<div>Not found</div>} />
     </Routes>
+    </LanguageProvider>
     </PageTransition>
   );
 }

@@ -87,6 +87,15 @@ function Navbar() {
               whileHover={{ y: -2 }}
               transition={{ duration: 0.2 }}
             >
+              <Link className="nav-link" to="/projects">
+                {t(lang, 'nav.projects')}
+              </Link>
+            </motion.li>
+            <motion.li 
+              className="nav-item"
+              whileHover={{ y: -2 }}
+              transition={{ duration: 0.2 }}
+            >
               <Link className="nav-link" to="/about">
                 {t(lang, 'nav.about')}
               </Link>

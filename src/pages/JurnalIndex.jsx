@@ -261,7 +261,7 @@ export default function JurnalIndex() {
                 <motion.input
                   className="form-control bg-dark text-light border-secondary"
                   style={{ borderRadius: '10px' }}
-                  placeholder="{t(lang, 'publications.filter_search_placeholder')}"
+                  placeholder={t(lang, 'publications.filter_search_placeholder')}
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   whileFocus={{ scale: 1.02, borderColor: '#17a2b8' }}

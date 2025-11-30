@@ -336,7 +336,7 @@ export default function About() {
                   variants={fadeInUp}
                   transition={{ delay: 0.3 }}
                 >
-                  <span className="badge bg-info text-dark px-3 py-2">Kepala Laboratorium</span>
+                  <span className="badge bg-info text-dark px-3 py-2">{t(lang, 'about.head_lab')}</span>
                 </motion.div>
               </motion.div>
               
@@ -512,7 +512,7 @@ export default function About() {
                   labkc@ub.ac.id
                 </motion.a>
                 <p className="text-white-50 small mb-0">
-                  Untuk keperluan kolaborasi & informasi
+                  {t(lang, 'about.full_info')}
                 </p>
               </motion.div>
             </motion.div>
@@ -565,7 +565,7 @@ export default function About() {
                   @is.lab.filkom
                 </motion.a>
                 <p className="small text-white-50 mb-0">
-                  Follow untuk update terbaru!
+                  {t(lang, 'about.follow_us')}
                 </p>
               </motion.div>
             </motion.div>

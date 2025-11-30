@@ -7,7 +7,8 @@ export const translations = {
       members: "Anggota",
       publications: "Jurnal",
       news: "Berita & Agenda",
-      about: "Tentang"
+      about: "Tentang",
+      projects: "Produk dan Projek"
     },
     
     // Home Page
@@ -48,6 +49,9 @@ export const translations = {
       desc2: "Laboratorium Sistem Cerdas terletak di Gedung F FILKOM UB. Adapun kegiatan yang dapat dilakukan di lingkup laboratorium Sistem Cerdas meliputi kegiatan praktikum, penggunaan ruang laboratorium, penggunaan laboratorium untuk penelitian dan kerjasama penelitian, pengabdian masyarakat, praktik pembelajaran, diskusi, simulasi, pengerjaan skripsi, sertifikasi atau sejenisnya.",
       main_function: "Fungsi utama:",
       function_desc: "Sarana untuk melakukan praktik atau penerapan atas teori, penelitian dan pengembangan keilmuan di lingkungan FILKOM UB, sehingga menjadi unsur penting dalam kegiatan pendidikan, pengabdian, dan penelitian.",
+      head_lab:"Kepala Laboratorium",
+      full_info:"Untuk keperluan kolaborasi & informasi",
+      follow_us:"Follow untuk update terbaru!",
       location_label: "Lokasi",
       location_building: "Gedung F, Lantai 9",
       location_campus: "FILKOM UB",
@@ -169,7 +173,8 @@ export const translations = {
       members: "Members",
       publications: "Publications",
       news: "News & Events",
-      about: "About"
+      about: "About",
+      projects: "Product and Projects"
     },
     
     // Home Page
@@ -215,6 +220,9 @@ export const translations = {
       location_campus: "FILKOM UB",
       head_welcome: "Welcome to Intelligent Systems Laboratory",
       head_desc: "With full dedication, we develop research and innovation in the field of Artificial Intelligence to create intelligent solutions that have a real impact on society.",
+      head_lab:"Laboratory Director",
+      full_info:"For collaboration and further information",
+      follow_us:"Stay updated—follow us!",
       btn_team: "View Our Team",
       contact_title: "Contact",
       contact_subtitle: "Us",

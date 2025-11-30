@@ -21,6 +21,10 @@ import CollabEditor from "./pages/admin/CollabEditor";
 import PageTransition from './components/PageTransition';
 import './components/transitions.css';
 import { LanguageProvider } from './contexts/LanguageContext';
+import ProjectsIndex from "./pages/ProjectsIndex";
+import ProjectDetail from "./pages/ProjectDetail";
+import ProjectsAdminList from "./pages/admin/ProjectsAdminList";
+import ProjectEditor from "./pages/admin/ProjectEditor";
 
 // C. saya akan implement sendiri
 
@@ -54,6 +58,11 @@ export default function App() {
       <Route path="admin/kolaborasi" element={<Layout><CollabAdminList /></Layout>} />
       <Route path="admin/kolaborasi/new" element={<Layout><CollabEditor /></Layout>} />
       <Route path="admin/kolaborasi/:id/edit" element={<Layout><CollabEditor /></Layout>} />
+      <Route path="/projects" element={<Layout><ProjectsIndex /></Layout>} />
+      <Route path="/projects/:slug" element={<Layout><ProjectDetail /></Layout>} />
+      <Route path="/admin/projects" element={<Layout><ProjectsAdminList /></Layout>} />
+      <Route path="/admin/projects/new" element={<Layout><ProjectEditor /></Layout>} />
+      <Route path="/admin/projects/:slug/edit" element={<Layout><ProjectEditor /></Layout>} />
       <Route path="*" element={<div>Not found</div>} />
     </Routes>
     </LanguageProvider>

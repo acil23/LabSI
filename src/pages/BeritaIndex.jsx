@@ -3,6 +3,8 @@ import { Link, useSearchParams } from "react-router-dom";
 import NewsHeroCarousel from "../components/NewsHeroCarousel";
 import { getNews } from "../lib/api";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLanguage } from "../contexts/LanguageContext";
+import { t } from "../translations/translations";
 
 function formatDate(iso) {
   const d = new Date(iso);
@@ -12,6 +14,7 @@ function formatDate(iso) {
 }
 
 export default function BeritaIndex() {
+  const { lang } = useLanguage();
   const [heroItems, setHeroItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [items, setItems] = useState([]);
@@ -121,12 +124,12 @@ export default function BeritaIndex() {
           transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
         >
           <span className="badge bg-info text-dark px-4 py-2" style={{ fontSize: '0.9rem', letterSpacing: '1px' }}>
-            📰 NEWS & EVENTS
+            📰 {t(lang, 'news.badge')}
           </span>
         </motion.div>
         
         <h2 className="section-title mb-3" style={{ fontSize: '2.5rem' }}>
-          Berita & <span className="text-info">Acara</span>
+          {t(lang, 'news.title')} & <span className="text-info">{t(lang, 'news.title_highlight')}</span>
         </h2>
         
         <motion.div 
@@ -147,7 +150,7 @@ export default function BeritaIndex() {
           variants={fadeInUp}
           transition={{ delay: 0.2 }}
         >
-          Informasi terkini seputar kegiatan dan pencapaian kami
+          {t(lang, 'news.subtitle')}
         </motion.p>
       </motion.div>
 
@@ -183,7 +186,7 @@ export default function BeritaIndex() {
               <span className="visually-hidden">Loading...</span>
             </div>
           </motion.div>
-          <p className="text-white-50 mt-3">Memuat berita...</p>
+          <p className="text-white-50 mt-3">{t(lang, 'news.loading')}</p>
         </motion.div>
       ) : (
         <>
@@ -258,7 +261,7 @@ export default function BeritaIndex() {
                                 className="text-info fw-bold text-decoration-none"
                                 style={{ fontSize: '0.9rem' }}
                               >
-                                read more →
+                                {t(lang, 'news.read_more')} →
                               </Link>
                             </motion.div>
                           </div>
@@ -284,8 +287,8 @@ export default function BeritaIndex() {
                     }}
                   >
                     <div style={{ fontSize: '3rem' }}>📭</div>
-                    <h5 className="text-white-50 mt-3">Belum ada berita</h5>
-                    <p className="text-white-50 small">Nantikan informasi terbaru dari kami</p>
+                    <h5 className="text-white-50 mt-3">{t(lang, 'news.no_news')}</h5>
+                    <p className="text-white-50 small">{t(lang, 'news.no_news_desc')}</p>
                   </div>
                 </motion.div>
               )}

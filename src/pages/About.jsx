@@ -2,8 +2,11 @@ import React from "react";
 import { Link } from "react-router-dom";
 import NeuralNetworkBackground from "../components/NeuralNetworkBackground";
 import { motion } from "framer-motion";
+import { useLanguage } from "../contexts/LanguageContext";
+import { t } from "../translations/translations";
 
 export default function About() {
+  const { lang } = useLanguage();
   const fadeInUp = {
     hidden: { opacity: 0, y: 30 },
     visible: { opacity: 1, y: 0 }
@@ -59,7 +62,7 @@ export default function About() {
               style={{ display: 'inline-block' }}
             >
               <span className="badge bg-info text-dark px-4 py-2 mb-3" style={{ fontSize: '0.9rem', letterSpacing: '1px' }}>
-                INTELLIGENT SYSTEMS LAB
+                {t(lang, 'about.badge')}
               </span>
             </motion.div>
           </motion.div>
@@ -70,8 +73,8 @@ export default function About() {
             transition={{ duration: 0.8, delay: 0.2 }}
             style={{ lineHeight: '1.3' }}
           >
-            Tentang Laboratorium<br />
-            <span className="text-info">Sistem Cerdas</span>
+            {t(lang, 'about.title')}<br />
+            <span className="text-info">{t(lang, 'about.title_highlight')}</span>
           </motion.h1>
           
           <motion.p 
@@ -80,7 +83,7 @@ export default function About() {
             variants={fadeInUp}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            Eksplorasi bidang <em className="text-info">Artificial Intelligence</em> di FILKOM UB—riset, edukasi, dan kolaborasi yang berdampak.
+            {t(lang, 'about.subtitle')}
           </motion.p>
 
           <motion.div
@@ -90,22 +93,22 @@ export default function About() {
             <div className="d-flex justify-content-center gap-3 flex-wrap">
               <motion.div whileHover={{ y: -3 }} whileTap={{ scale: 0.95 }}>
                 <span className="badge bg-dark text-info px-3 py-2" style={{ fontSize: '0.85rem' }}>
-                  🤖 Machine Learning
+                  🤖 {t(lang, 'about.topics.ml')}
                 </span>
               </motion.div>
               <motion.div whileHover={{ y: -3 }} whileTap={{ scale: 0.95 }}>
                 <span className="badge bg-dark text-info px-3 py-2" style={{ fontSize: '0.85rem' }}>
-                  🧠 Deep Learning
+                  🧠 {t(lang, 'about.topics.dl')}
                 </span>
               </motion.div>
               <motion.div whileHover={{ y: -3 }} whileTap={{ scale: 0.95 }}>
                 <span className="badge bg-dark text-info px-3 py-2" style={{ fontSize: '0.85rem' }}>
-                  👁️ Computer Vision
+                  👁️ {t(lang, 'about.topics.cv')}
                 </span>
               </motion.div>
               <motion.div whileHover={{ y: -3 }} whileTap={{ scale: 0.95 }}>
                 <span className="badge bg-dark text-info px-3 py-2" style={{ fontSize: '0.85rem' }}>
-                  💬 NLP
+                  💬 {t(lang, 'about.topics.nlp')}
                 </span>
               </motion.div>
             </div>
@@ -128,7 +131,7 @@ export default function About() {
                 className="section-title mb-3"
                 style={{ fontSize: '2.5rem', fontWeight: '700' }}
               >
-                Sekilas <span className="text-info">Tentang Kami</span>
+                {t(lang, 'about.overview_title')} <span className="text-info">{t(lang, 'about.overview_subtitle')}</span>
               </motion.h2>
               <motion.div 
                 className="mx-auto mb-3"
@@ -181,19 +184,15 @@ export default function About() {
                   >
                     🔬
                   </div>
-                  <h3 className="text-info mb-0 fw-bold">Visi & Misi</h3>
+                  <h3 className="text-info mb-0 fw-bold">{t(lang, 'about.vision_mission')}</h3>
                 </div>
                 
                 <p className="mb-4 text-white" style={{ lineHeight: '1.8', fontSize: '1rem' }}>
-                  Laboratorium Sistem Cerdas merupakan salah satu laboratorium komputer yang memfokuskan diri pada bidang
-                  pengembangan sistem cerdas di Fakultas Ilmu Komputer Universitas Brawijaya (FILKOM UB).
+                  {t(lang, 'about.desc1')}
                 </p>
                 
                 <p className="mb-4 text-white-50" style={{ lineHeight: '1.8', fontSize: '0.95rem' }}>
-                  Laboratorium Sistem Cerdas terletak di Gedung F FILKOM UB. Adapun kegiatan yang dapat dilakukan di lingkup
-                  laboratorium Sistem Cerdas meliputi kegiatan praktikum, penggunaan ruang laboratorium, penggunaan
-                  laboratorium untuk penelitian dan kerjasama penelitian, pengabdian masyarakat, praktik pembelajaran,
-                  diskusi, simulasi, pengerjaan skripsi, sertifikasi atau sejenisnya.
+                  {t(lang, 'about.desc2')}
                 </p>
                 
                 <div 
@@ -204,9 +203,7 @@ export default function About() {
                   }}
                 >
                   <p className="mb-0 text-white" style={{ fontSize: '0.95rem', lineHeight: '1.7' }}>
-                    <strong className="text-info">Fungsi utama:</strong> Sarana untuk melakukan praktik atau penerapan atas teori,
-                    penelitian dan pengembangan keilmuan di lingkungan FILKOM UB, sehingga menjadi unsur penting dalam
-                    kegiatan pendidikan, pengabdian, dan penelitian.
+                    <strong className="text-info">{t(lang, 'about.main_function')}</strong> {t(lang, 'about.function_desc')}
                   </p>
                 </div>
               </motion.div>
@@ -264,9 +261,9 @@ export default function About() {
                     viewport={{ once: true }}
                     transition={{ duration: 0.8, delay: 0.5 }}
                   >
-                    <p className="mb-1 text-info fw-bold" style={{ fontSize: '0.9rem' }}>📍 Lokasi</p>
+                    <p className="mb-1 text-info fw-bold" style={{ fontSize: '0.9rem' }}>📍 {t(lang, 'about.location_label')}</p>
                     <p className="mb-0 text-white" style={{ fontSize: '0.85rem' }}>
-                      Gedung F, Lantai 9<br />FILKOM UB
+                      {t(lang, 'about.location_building')}<br />{t(lang, 'about.location_campus')}
                     </p>
                   </motion.div>
                 </div>
@@ -362,7 +359,7 @@ export default function About() {
                 />
                 
                 <h3 className="fw-bold mb-2 text-white" style={{ fontSize: '1.3rem' }}>
-                  Selamat datang di Laboratorium Sistem Cerdas 👋
+                  {t(lang, 'about.head_welcome')} 👋
                 </h3>
                 
                 <h4 className="mb-3 text-info fw-bold" style={{ fontSize: '1.8rem' }}>
@@ -370,8 +367,7 @@ export default function About() {
                 </h4>
                 
                 <p className="text-white-50 mb-4" style={{ lineHeight: '1.7', fontSize: '0.95rem' }}>
-                  Dengan dedikasi penuh, kami mengembangkan penelitian dan inovasi di bidang Artificial Intelligence
-                  untuk menciptakan solusi cerdas yang berdampak nyata bagi masyarakat.
+                  {t(lang, 'about.head_desc')}
                 </p>
                 
                 <motion.div
@@ -387,7 +383,7 @@ export default function About() {
                       color: '#000'
                     }}
                   >
-                    Lihat Tim Kami
+                    {t(lang, 'about.btn_team')}
                     <motion.span 
                       className="ms-2"
                       animate={{ x: [0, 5, 0] }}
@@ -415,9 +411,9 @@ export default function About() {
             transition={{ duration: 0.6 }}
           >
             <h2 className="section-title mb-2" style={{ fontSize: '2rem' }}>
-              Hubungi <span className="text-info">Kami</span>
+              {t(lang, 'about.contact_title')} <span className="text-info">{t(lang, 'about.contact_subtitle')}</span>
             </h2>
-            <p className="text-white-50">Mari terhubung dan berkolaborasi bersama</p>
+            <p className="text-white-50">{t(lang, 'about.contact_desc')}</p>
           </motion.div>
 
           <motion.div 
@@ -462,10 +458,10 @@ export default function About() {
                     📍
                   </div>
                 </motion.div>
-                <h5 className="text-info mb-3 fw-bold">Lokasi</h5>
+                <h5 className="text-info mb-3 fw-bold">{t(lang, 'about.location_label')}</h5>
                 <p className="mb-0 text-white" style={{ lineHeight: '1.8' }}>
-                  <strong>FILKOM Universitas Brawijaya</strong><br />
-                  Gedung F — Lantai 9<br />
+                  <strong>{t(lang, 'about.location_campus')}</strong><br />
+                  {t(lang, 'about.location_building')}<br />
                   <span className="text-white-50 small">Malang, Jawa Timur</span>
                 </p>
               </motion.div>
@@ -506,7 +502,7 @@ export default function About() {
                     ✉️
                   </div>
                 </motion.div>
-                <h5 className="text-info mb-3 fw-bold">Email</h5>
+                <h5 className="text-info mb-3 fw-bold">{t(lang, 'about.contact_email')}</h5>
                 <motion.a 
                   href="mailto:labkc@ub.ac.id" 
                   className="text-white text-decoration-none d-block mb-2"
@@ -556,7 +552,7 @@ export default function About() {
                     📱
                   </div>
                 </motion.div>
-                <h5 className="text-info mb-3 fw-bold">Social Media</h5>
+                <h5 className="text-info mb-3 fw-bold">{t(lang, 'about.contact_social')}</h5>
                 <motion.a
                   href="https://instagram.com/is.lab.filkom"
                   target="_blank"

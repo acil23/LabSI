@@ -22,6 +22,12 @@ import PageTransition from './components/PageTransition';
 import './components/transitions.css';
 import { LanguageProvider } from './contexts/LanguageContext';
 
+// C. saya akan implement sendiri
+
+// Berikutnya saya mau bantuan untuk membuat halaman baru, yaitu product dan project yang menampilkan karya atau hasil dari lab ini
+
+// contoh datanya seperti berikut
+
 export default function App() {
   return (
     <PageTransition>

@@ -3,11 +3,14 @@ import { Link, useSearchParams } from "react-router-dom";
 import { getJournals } from "../lib/api";
 import { asAbsolute } from "../lib/http";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLanguage } from "../contexts/LanguageContext";
+import { t } from "../translations/translations";
 
 const LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 const VIEW_PER_PAGE = 8;
 
 export default function JurnalIndex() {
+  const { lang } = useLanguage();
   const [rawItems, setRawItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState("");
@@ -169,7 +172,7 @@ export default function JurnalIndex() {
               <span className="visually-hidden">Loading...</span>
             </div>
           </motion.div>
-          <p className="text-white-50 mt-3">Memuat data jurnal...</p>
+          <p className="text-white-50 mt-3">{t(lang, 'publications.loading')}</p>
         </motion.div>
       </section>
     );
@@ -209,12 +212,12 @@ export default function JurnalIndex() {
             transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
           >
             <span className="badge bg-info text-dark px-4 py-2" style={{ fontSize: '0.9rem', letterSpacing: '1px' }}>
-              📚 PUBLICATIONS
+              📚 {t(lang, 'publications.badge')}
             </span>
           </motion.div>
           
           <h2 className="section-title mb-3" style={{ fontSize: '2.5rem' }}>
-            Publikasi <span className="text-info">Jurnal & Konferensi</span>
+            {t(lang, 'publications.title')} <span className="text-info">{t(lang, 'publications.title_highlight')}</span>
           </h2>
           
           <motion.div 
@@ -235,7 +238,7 @@ export default function JurnalIndex() {
             variants={fadeInUp}
             transition={{ delay: 0.2 }}
           >
-            Hasil penelitian dan karya ilmiah kami
+            {t(lang, 'publications.subtitle')}
           </motion.p>
         </motion.div>
 
@@ -254,18 +257,18 @@ export default function JurnalIndex() {
           <form onSubmit={onSearchSubmit}>
             <div className="row g-3 align-items-center mb-4">
               <div className="col-md-5">
-                <label className="small text-info mb-2 d-block fw-semibold">🔍 Cari Publikasi</label>
+                <label className="small text-info mb-2 d-block fw-semibold">🔍 {t(lang, 'publications.filter_search')}</label>
                 <motion.input
                   className="form-control bg-dark text-light border-secondary"
                   style={{ borderRadius: '10px' }}
-                  placeholder="Cari judul atau penulis..."
+                  placeholder="{t(lang, 'publications.filter_search_placeholder')}"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   whileFocus={{ scale: 1.02, borderColor: '#17a2b8' }}
                 />
               </div>
               <div className="col-md-2">
-                <label className="small text-info mb-2 d-block fw-semibold">📅 Tahun</label>
+                <label className="small text-info mb-2 d-block fw-semibold">📅 {t(lang, 'publications.filter_year')}</label>
                 <motion.select
                   className="form-select bg-dark text-light border-secondary"
                   style={{ borderRadius: '10px' }}
@@ -273,14 +276,14 @@ export default function JurnalIndex() {
                   onChange={(e) => setYear(e.target.value)}
                   whileFocus={{ scale: 1.02, borderColor: '#17a2b8' }}
                 >
-                  <option value="">Semua Tahun</option>
+                  <option value="">{t(lang, 'publications.filter_all_years')}</option>
                   {availableYears.map((y) => (
                     <option key={y} value={y}>{y}</option>
                   ))}
                 </motion.select>
               </div>
               <div className="col-md-2">
-                <label className="small text-info mb-2 d-block fw-semibold">📝 Tipe</label>
+                <label className="small text-info mb-2 d-block fw-semibold">📝 {t(lang, 'publications.filter_type')}</label>
                 <motion.select
                   className="form-select bg-dark text-light border-secondary"
                   style={{ borderRadius: '10px' }}
@@ -288,7 +291,7 @@ export default function JurnalIndex() {
                   onChange={(e) => setType(e.target.value)}
                   whileFocus={{ scale: 1.02, borderColor: '#17a2b8' }}
                 >
-                  <option value="">Semua Tipe</option>
+                  <option value="">{t(lang, 'publications.filter_all_types')}</option>
                   {availableTypes.map((t) => (
                     <option key={t} value={t}>{t}</option>
                   ))}
@@ -302,7 +305,7 @@ export default function JurnalIndex() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  Cari
+                  {t(lang, 'publications.btn_search')}
                 </motion.button>
                 <motion.button
                   type="button"
@@ -312,7 +315,7 @@ export default function JurnalIndex() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  Reset
+                  {t(lang, 'publications.btn_reset')}
                 </motion.button>
               </div>
             </div>
@@ -320,7 +323,7 @@ export default function JurnalIndex() {
 
           {/* 🔤 Filter A–Z */}
           <div>
-            <label className="small text-info mb-2 d-block fw-semibold">🔤 Filter Abjad</label>
+            <label className="small text-info mb-2 d-block fw-semibold">🔤 {t(lang, 'publications.filter_alphabet')}</label>
             <div className="d-flex flex-wrap gap-2">
               <motion.button
                 type="button"
@@ -330,7 +333,7 @@ export default function JurnalIndex() {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
               >
-                All
+                {t(lang, 'publications.btn_all')}
               </motion.button>
               {LETTERS.map((ch) => (
                 <motion.button
@@ -357,8 +360,8 @@ export default function JurnalIndex() {
               animate={{ opacity: 1, height: 'auto' }}
               transition={{ duration: 0.3 }}
             >
-              <small className="text-info fw-semibold">Filter aktif: </small>
-              <span className="text-white">{filtered.length} hasil ditemukan</span>
+              <small className="text-info fw-semibold">{t(lang, 'members.filter_active')}: </small>
+              <span className="text-white">{filtered.length} {t(lang, 'publications.results_found')}</span>
             </motion.div>
           )}
         </motion.div>
@@ -433,7 +436,7 @@ export default function JurnalIndex() {
                           className="btn btn-outline-info btn-sm"
                           style={{ borderRadius: '8px' }}
                         >
-                          Baca Detail
+                          {t(lang, 'publications.btn_detail')}
                         </Link>
                       </motion.div>
                       {j.pdf_url && (
@@ -448,7 +451,7 @@ export default function JurnalIndex() {
                             className="btn btn-info btn-sm text-dark"
                             style={{ borderRadius: '8px' }}
                           >
-                            ⬇️ PDF
+                            ⬇️ {t(lang, 'publications.btn_download')}
                           </a>
                         </motion.div>
                       )}
@@ -473,8 +476,8 @@ export default function JurnalIndex() {
                   }}
                 >
                   <div style={{ fontSize: '3rem' }}>🔍</div>
-                  <h5 className="text-white-50 mt-3">Tidak ada hasil</h5>
-                  <p className="text-white-50 small">Coba ubah filter atau kata kunci pencarian</p>
+                  <h5 className="text-white-50 mt-3">{t(lang, 'publications.no_results')}</h5>
+                  <p className="text-white-50 small">{t(lang, 'publications.no_results_desc')}</p>
                 </div>
               </motion.div>
             )}

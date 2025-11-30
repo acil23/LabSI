@@ -3,12 +3,15 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { getMemberDetailBySlug } from "../lib/apiMembers";
 import { motion } from "framer-motion";
+import { useLanguage } from "../contexts/LanguageContext";
+import { t } from "../translations/translations";
 
 export default function AnggotaDetail() {
   const { slug } = useParams();
   const [member, setMember] = useState(null);
   const [err, setErr] = useState("");
   const [loading, setLoading] = useState(true);
+  const { lang } = useLanguage();
 
   useEffect(() => {
     (async () => {
@@ -74,7 +77,7 @@ export default function AnggotaDetail() {
             <span className="visually-hidden">Loading...</span>
           </div>
         </motion.div>
-        <p className="text-white-50 mt-3">Memuat profil...</p>
+        <p className="text-white-50 mt-3">{t(lang, 'member_detail.loading')}</p>
       </motion.div>
     </section>
   );
@@ -98,9 +101,9 @@ export default function AnggotaDetail() {
         animate={{ opacity: 1, y: 0 }}
       >
         <div style={{ fontSize: '4rem' }}>😕</div>
-        <p className="text-white-50 mt-3">Profil tidak ditemukan</p>
+        <p className="text-white-50 mt-3">{t(lang, 'member_detail.not_found')}</p>
         <Link to="/anggota" className="btn btn-outline-info mt-3">
-          ← Kembali ke daftar
+          ← {t(lang, 'member_detail.btn_back')}
         </Link>
       </motion.div>
     </section>
@@ -276,7 +279,7 @@ export default function AnggotaDetail() {
                     variants={fadeInUp}
                     transition={{ delay: 0.7 }}
                   >
-                    <h6 className="mt-4 text-info mb-3">🎯 Bidang Keahlian</h6>
+                    <h6 className="mt-4 text-info mb-3">🎯 {t(lang, 'member_detail.expertise')}</h6>
                     <ul className="list-unstyled text-start mb-0">
                       {member.skills.map((s, i) => (
                         <motion.li 
@@ -300,7 +303,7 @@ export default function AnggotaDetail() {
                     variants={fadeInUp}
                     transition={{ delay: 0.8 }}
                   >
-                    <h6 className="mt-4 text-info mb-3">🏆 Sertifikasi</h6>
+                    <h6 className="mt-4 text-info mb-3">🏆 {t(lang, 'member_detail.certifications')}</h6>
                     <ul className="list-unstyled text-start mb-0">
                       {member.certifications.map((c, i) => (
                         <motion.li 
@@ -353,7 +356,7 @@ export default function AnggotaDetail() {
                 >
                   👤
                 </motion.div>
-                <h5 className="text-light mb-0">Tentang</h5>
+                <h5 className="text-light mb-0">{t(lang, 'member_detail.about')}</h5>
               </div>
               
               <motion.div
@@ -376,7 +379,7 @@ export default function AnggotaDetail() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4 }}
               >
-                {member.bio || "Belum ada informasi biografis."}
+                {member.bio || "{t(lang, 'member_detail.no_bio')}"}
               </motion.p>
             </motion.div>
           </motion.div>
@@ -415,7 +418,7 @@ export default function AnggotaDetail() {
               >
                 💼
               </motion.div>
-              <h5 className="text-light mb-0">Pengalaman</h5>
+              <h5 className="text-light mb-0">{t(lang, 'member_detail.experience_title')}</h5>
             </div>
             
             <motion.div
@@ -514,7 +517,7 @@ export default function AnggotaDetail() {
               >
                 🎓
               </motion.div>
-              <h5 className="text-light mb-0">Pendidikan</h5>
+              <h5 className="text-light mb-0">{t(lang, 'member_detail.education_title')}</h5>
             </div>
             
             <motion.div

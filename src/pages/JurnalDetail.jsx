@@ -3,8 +3,11 @@ import { Link, useParams } from "react-router-dom";
 import { getJournalBySlug } from "../lib/api";
 import { asAbsolute } from "../lib/http";
 import { motion } from "framer-motion";
+import { useLanguage } from "../contexts/LanguageContext";
+import { t } from "../translations/translations";
 
 export default function JurnalDetail() {
+  const { lang } = useLanguage();
   const { slug } = useParams();
   const [data, setData] = useState(null);
   const [err, setErr] = useState("");
@@ -59,7 +62,7 @@ export default function JurnalDetail() {
             <span className="visually-hidden">Loading...</span>
           </div>
         </motion.div>
-        <p className="text-white-50 mt-3">Memuat publikasi...</p>
+        <p className="text-white-50 mt-3">{t(lang, 'publication_detail.loading')}</p>
       </motion.div>
     </section>
   );
@@ -83,9 +86,9 @@ export default function JurnalDetail() {
         animate={{ opacity: 1, y: 0 }}
       >
         <div style={{ fontSize: '4rem' }}>📄</div>
-        <p className="text-white-50 mt-3">Publikasi tidak ditemukan</p>
+        <p className="text-white-50 mt-3">{t(lang, 'publication_detail.not_found')}</p>
         <Link to="/jurnal" className="btn btn-outline-info mt-3">
-          ← Kembali ke daftar
+          ← {t(lang, 'publication_detail.btn_back')}
         </Link>
       </motion.div>
     </section>
@@ -219,7 +222,7 @@ export default function JurnalDetail() {
                 >
                   👥
                 </motion.div>
-                <strong className="text-info">Authors:</strong>
+                <strong className="text-info">{t(lang, 'publication_detail.authors')}:</strong>
               </div>
               <p className="text-white ms-5">{data.authors}</p>
             </motion.div>
@@ -258,7 +261,7 @@ export default function JurnalDetail() {
                 >
                   📋
                 </motion.div>
-                <h4 className="text-light mb-0">Abstract</h4>
+                <h4 className="text-light mb-0">{t(lang, 'publication_detail.abstract')}</h4>
               </div>
               <motion.div
                 className="p-4 rounded-3"
@@ -272,7 +275,7 @@ export default function JurnalDetail() {
                 }}
               >
                 <p className="text-white mb-0" style={{ lineHeight: '1.8', textAlign: 'justify' }}>
-                  {data.abstract || "Abstract tidak tersedia."}
+                  {data.abstract || "{t(lang, 'publication_detail.no_abstract')}"}
                 </p>
               </motion.div>
             </motion.div>
@@ -335,7 +338,7 @@ export default function JurnalDetail() {
                       boxShadow: '0 4px 15px rgba(23, 162, 184, 0.3)'
                     }}
                   >
-                    📄 Download PDF
+                    📄 {t(lang, 'publication_detail.btn_download')}
                   </a>
                 </motion.div>
               </motion.div>
@@ -355,7 +358,7 @@ export default function JurnalDetail() {
             whileTap={{ scale: 0.95 }}
           >
             <Link to="/jurnal" className="btn btn-outline-info">
-              ← Kembali ke daftar
+              ← {t(lang, 'publication_detail.btn_back')}
             </Link>
           </motion.div>
         </motion.div>

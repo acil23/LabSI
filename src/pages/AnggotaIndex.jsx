@@ -3,10 +3,13 @@ import React, { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { listMembers } from "../lib/apiMembers";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLanguage } from "../contexts/LanguageContext";
+import { t } from "../translations/translations";
 
 const uniq = (arr) => Array.from(new Set(arr.filter(Boolean)));
 
 export default function AnggotaIndex() {
+  const { lang } = useLanguage();
   const [items, setItems] = useState([]);
   const [opts, setOpts]   = useState({ positions: [], faculties: [], programs: [] });
   const [err, setErr]     = useState("");
@@ -133,12 +136,12 @@ export default function AnggotaIndex() {
           transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
         >
           <span className="badge bg-info text-dark px-4 py-2" style={{ fontSize: '0.9rem', letterSpacing: '1px' }}>
-            👥 OUR TEAM
+            👥 {t(lang, 'members.badge')}
           </span>
         </motion.div>
         
         <h2 className="section-title mb-3" style={{ fontSize: '2.5rem' }}>
-          Direktori <span className="text-info">Anggota</span>
+          {t(lang, 'members.title')} <span className="text-info">{t(lang, 'members.title_highlight')}</span>
         </h2>
         
         <motion.div 
@@ -159,7 +162,7 @@ export default function AnggotaIndex() {
           variants={fadeInUp}
           transition={{ delay: 0.2 }}
         >
-          Temukan dan kenali anggota tim kami
+          {t(lang, 'members.subtitle')}
         </motion.p>
       </motion.div>
 
@@ -179,7 +182,7 @@ export default function AnggotaIndex() {
         >
           <div className="row g-3 align-items-center">
             <motion.div className="col-md-3" variants={fadeInUp}>
-              <label className="small text-info mb-2 d-block fw-semibold">🏢 Jabatan</label>
+              <label className="small text-info mb-2 d-block fw-semibold">🏢 {t(lang, 'members.filter_position')}1</label>
               <motion.select 
                 name="jabatan" 
                 value={jabatan} 
@@ -188,13 +191,13 @@ export default function AnggotaIndex() {
                 style={{ borderRadius: '10px' }}
                 whileFocus={{ scale: 1.02, borderColor: '#17a2b8' }}
               >
-                <option value="">Semua Jabatan</option>
+                <option value="">{t(lang, 'members.filter_all_position')}</option>
                 {opts.positions.map((v) => <option key={v} value={v}>{v}</option>)}
               </motion.select>
             </motion.div>
             
             <motion.div className="col-md-3" variants={fadeInUp}>
-              <label className="small text-info mb-2 d-block fw-semibold">🎓 Fakultas</label>
+              <label className="small text-info mb-2 d-block fw-semibold">🎓 {t(lang, 'members.filter_faculty')}</label>
               <motion.select 
                 name="fakultas" 
                 value={fakultas} 
@@ -203,13 +206,13 @@ export default function AnggotaIndex() {
                 style={{ borderRadius: '10px' }}
                 whileFocus={{ scale: 1.02, borderColor: '#17a2b8' }}
               >
-                <option value="">Semua Fakultas</option>
+                <option value="">{t(lang, 'members.filter_all_faculty')}</option>
                 {opts.faculties.map((v) => <option key={v} value={v}>{v}</option>)}
               </motion.select>
             </motion.div>
             
             <motion.div className="col-md-3" variants={fadeInUp}>
-              <label className="small text-info mb-2 d-block fw-semibold">📚 Prodi</label>
+              <label className="small text-info mb-2 d-block fw-semibold">📚 {t(lang, 'members.filter_program')}</label>
               <motion.select 
                 name="prodi" 
                 value={prodi} 
@@ -218,17 +221,17 @@ export default function AnggotaIndex() {
                 style={{ borderRadius: '10px' }}
                 whileFocus={{ scale: 1.02, borderColor: '#17a2b8' }}
               >
-                <option value="">Semua Prodi</option>
+                <option value="">{t(lang, 'members.filter_all_program')}</option>
                 {opts.programs.map((v) => <option key={v} value={v}>{v}</option>)}
               </motion.select>
             </motion.div>
             
             <motion.div className="col-md-3" variants={fadeInUp}>
-              <label className="small text-info mb-2 d-block fw-semibold">🔍 Search</label>
+              <label className="small text-info mb-2 d-block fw-semibold">🔍 {t(lang, 'members.filter_search')}</label>
               <motion.input
                 className="form-control bg-dark text-light border-secondary"
                 style={{ borderRadius: '10px' }}
-                placeholder="Cari nama..."
+                placeholder={t(lang, 'members.filter_search')}
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
                 onKeyDown={(e) => { if (e.key === "Enter") go(1); }}
@@ -245,7 +248,7 @@ export default function AnggotaIndex() {
               animate={{ opacity: 1, height: 'auto' }}
               transition={{ duration: 0.3 }}
             >
-              <span className="small text-white-50">Filter aktif:</span>
+              <span className="small text-white-50">{t(lang, 'members.filter_active')}:</span>
               {jabatan && (
                 <motion.span 
                   className="badge bg-info text-dark"
@@ -311,7 +314,7 @@ export default function AnggotaIndex() {
               <span className="visually-hidden">Loading...</span>
             </div>
           </motion.div>
-          <p className="text-white-50 mt-3">Memuat data anggota...</p>
+          <p className="text-white-50 mt-3">{t(lang, 'members.loading')}</p>
         </motion.div>
       ) : (
         <>
@@ -415,7 +418,7 @@ export default function AnggotaIndex() {
                             className="btn btn-sm btn-info text-dark fw-semibold"
                             style={{ borderRadius: '8px' }}
                           >
-                            Lihat Profil →
+                            {t(lang, 'members.btn_view_profile')} →
                           </Link>
                         </motion.div>
                       </div>
@@ -439,8 +442,8 @@ export default function AnggotaIndex() {
                     }}
                   >
                     <div style={{ fontSize: '3rem' }}>🔍</div>
-                    <h5 className="text-white-50 mt-3">Tidak ada hasil ditemukan</h5>
-                    <p className="text-white-50 small">Coba ubah filter atau kata kunci pencarian</p>
+                    <h5 className="text-white-50 mt-3">{t(lang, 'members.no_results')}</h5>
+                    <p className="text-white-50 small">{t(lang, 'members.no_results_desc')}</p>
                   </div>
                 </motion.div>
               )}

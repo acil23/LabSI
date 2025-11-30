@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { getNewsBySlug, getNews } from "../lib/api";
 import { motion } from "framer-motion";
+import { useLanguage } from "../contexts/LanguageContext";
+import { t } from "../translations/translations";
 
 function formatDate(iso) {
   const d = new Date(iso);
@@ -9,6 +11,7 @@ function formatDate(iso) {
 }
 
 export default function BeritaDetail() {
+  const { lang } = useLanguage();
   const { slug } = useParams();
   const [item, setItem] = useState(null);
   const [others, setOthers] = useState([]);
@@ -67,7 +70,7 @@ export default function BeritaDetail() {
             <span className="visually-hidden">Loading...</span>
           </div>
         </motion.div>
-        <p className="text-white-50 mt-3">Memuat berita...</p>
+        <p className="text-white-50 mt-3">{t(lang, 'news.loading')}</p>
       </motion.div>
     </section>
   );
@@ -100,7 +103,7 @@ export default function BeritaDetail() {
           whileTap={{ scale: 0.95 }}
         >
           <Link to="/berita" className="btn btn-outline-info">
-            ← Kembali ke daftar
+            ← {t(lang, 'member_detail.btn_back')}
           </Link>
         </motion.div>
       </motion.div>
@@ -250,7 +253,7 @@ export default function BeritaDetail() {
               📰
             </motion.div>
             <h3 className="text-light mb-0" style={{ fontSize: '1.8rem' }}>
-              Berita Lainnya
+              {t(lang, 'news.related_news')}
             </h3>
           </div>
 
@@ -314,7 +317,7 @@ export default function BeritaDetail() {
                       className="text-info fw-bold text-decoration-none"
                       style={{ fontSize: '0.9rem' }}
                     >
-                      read more →
+                      {t(lang, 'news.read_more')} →
                     </Link>
                   </motion.div>
                 </motion.div>

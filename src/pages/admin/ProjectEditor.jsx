@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import ImageUpload from '../../components/ImageUpload';
 import { 
   ArrowLeft, Save, X, Plus, Trash2, Upload, 
   Image as ImageIcon, Type, Video, Code, List,
@@ -450,76 +451,68 @@ const moveContentBlock = (index, direction) => {
             
             <div className="row g-3">
               {/* Thumbnail */}
-              <div className="col-md-4">
-                <label className="form-label text-light">Thumbnail URL</label>
-                <input
-                  type="url"
-                  name="thumbnail_url"
-                  className="form-control bg-dark text-light border-secondary"
-                  value={formData.thumbnail_url}
-                  onChange={handleChange}
-                  placeholder="https://..."
-                />
-                {formData.thumbnail_url && (
-                  <div className="mt-2">
-                    <img 
-                      src={formData.thumbnail_url} 
-                      alt="Thumbnail preview" 
-                      className="img-fluid rounded"
-                      style={{ maxHeight: '150px', objectFit: 'cover' }}
-                    />
-                  </div>
-                )}
-                <small className="text-muted">For card display (16:9)</small>
-              </div>
+                <div className="col-md-4">
+                  <label className="form-label text-light">Thumbnail Image</label>
+                  {/* Ganti input biasa dengan ImageUpload */}
+                  <ImageUpload 
+                    value={formData.thumbnail_url}
+                    onChange={(url) => setFormData(prev => ({ ...prev, thumbnail_url: url }))}
+                    placeholder="/uploads/projects/..."
+                  />
+                  
+                  {formData.thumbnail_url && (
+                    <div className="mt-2 position-relative">
+                      <img 
+                        src={formData.thumbnail_url} // Pastikan helper asAbsolute menghandle ini di Frontend view
+                        alt="Thumbnail" 
+                        className="img-fluid rounded"
+                        style={{ maxHeight: '150px', objectFit: 'cover', width: '100%' }}
+                      />
+                    </div>
+                  )}
+                  <small className="text-muted">For card display (16:9)</small>
+                </div>
 
-              {/* Banner */}
-              <div className="col-md-4">
-                <label className="form-label text-light">Banner URL</label>
-                <input
-                  type="url"
-                  name="banner_url"
-                  className="form-control bg-dark text-light border-secondary"
-                  value={formData.banner_url}
-                  onChange={handleChange}
-                  placeholder="https://..."
-                />
-                {formData.banner_url && (
-                  <div className="mt-2">
-                    <img 
-                      src={formData.banner_url} 
-                      alt="Banner preview" 
-                      className="img-fluid rounded"
-                      style={{ maxHeight: '150px', objectFit: 'cover' }}
-                    />
-                  </div>
-                )}
-                <small className="text-muted">Hero section (wide)</small>
-              </div>
+                {/* Banner */}
+                <div className="col-md-4">
+                  <label className="form-label text-light">Banner Image</label>
+                  <ImageUpload 
+                    value={formData.banner_url}
+                    onChange={(url) => setFormData(prev => ({ ...prev, banner_url: url }))}
+                    placeholder="/uploads/projects/..."
+                  />
+                  {formData.banner_url && (
+                    <div className="mt-2">
+                      <img 
+                        src={formData.banner_url} 
+                        alt="Banner" 
+                        className="img-fluid rounded"
+                        style={{ maxHeight: '150px', objectFit: 'cover', width: '100%' }}
+                      />
+                    </div>
+                  )}
+                  <small className="text-muted">Hero section (wide)</small>
+                </div>
 
-              {/* QR Code */}
-              <div className="col-md-4">
-                <label className="form-label text-light">QR Code URL</label>
-                <input
-                  type="url"
-                  name="qr_code_url"
-                  className="form-control bg-dark text-light border-secondary"
-                  value={formData.qr_code_url}
-                  onChange={handleChange}
-                  placeholder="https://..."
-                />
-                {formData.qr_code_url && (
-                  <div className="mt-2 text-center">
-                    <img 
-                      src={formData.qr_code_url} 
-                      alt="QR preview" 
-                      className="img-fluid rounded"
-                      style={{ maxHeight: '150px' }}
-                    />
-                  </div>
-                )}
-                <small className="text-muted">QR for quick access</small>
-              </div>
+                {/* QR Code */}
+                <div className="col-md-4">
+                  <label className="form-label text-light">QR Code</label>
+                  <ImageUpload 
+                    value={formData.qr_code_url}
+                    onChange={(url) => setFormData(prev => ({ ...prev, qr_code_url: url }))}
+                    placeholder="/uploads/projects/..."
+                  />
+                  {formData.qr_code_url && (
+                    <div className="mt-2 text-center">
+                      <img 
+                        src={formData.qr_code_url} 
+                        alt="QR" 
+                        className="img-fluid rounded"
+                        style={{ maxHeight: '150px' }}
+                      />
+                    </div>
+                  )}
+                </div>
             </div>
           </div>
         </motion.div>
@@ -869,29 +862,32 @@ const moveContentBlock = (index, direction) => {
                         </motion.button>
                       </div>
 
-                      <input
-                        type="url"
-                        className="form-control form-control-sm bg-dark text-light border-secondary mb-2"
-                        placeholder="Image URL"
-                        value={item.url}
-                        onChange={(e) => {
-                          const newGallery = [...formData.gallery];
-                          newGallery[idx].url = e.target.value;
-                          setFormData(prev => ({ ...prev, gallery: newGallery }));
-                        }}
-                      />
+                      {/* 1. GANTI INPUT URL DENGAN IMAGEUPLOAD */}
+                        <div className="mb-2">
+                          <ImageUpload 
+                            value={item.url}
+                            onChange={(url) => {
+                              // Perhatikan: di sini parameter langsung 'url', bukan event 'e'
+                              const newGallery = [...formData.gallery];
+                              newGallery[idx].url = url;
+                              setFormData(prev => ({ ...prev, gallery: newGallery }));
+                            }}
+                            placeholder="Image URL or Upload"
+                          />
+                        </div>
 
-                      <input
-                        type="text"
-                        className="form-control form-control-sm bg-dark text-light border-secondary mb-2"
-                        placeholder="Caption (optional)"
-                        value={item.caption}
-                        onChange={(e) => {
-                          const newGallery = [...formData.gallery];
-                          newGallery[idx].caption = e.target.value;
-                          setFormData(prev => ({ ...prev, gallery: newGallery }));
-                        }}
-                      />
+                        {/* 2. INPUT CAPTION BIARKAN SEPERTI SEMULA (JANGAN DIGANTI) */}
+                        <input
+                          type="text"
+                          className="form-control form-control-sm bg-dark text-light border-secondary mb-2"
+                          placeholder="Caption (optional)"
+                          value={item.caption}
+                          onChange={(e) => {
+                            const newGallery = [...formData.gallery];
+                            newGallery[idx].caption = e.target.value;
+                            setFormData(prev => ({ ...prev, gallery: newGallery }));
+                          }}
+                        />
 
                       {item.url && (
                         <div className="mt-2">
@@ -1088,23 +1084,20 @@ const moveContentBlock = (index, direction) => {
 
                     {block.type === 'image' && (
                       <div>
-                        <input
-                          type="url"
-                          className="form-control bg-dark text-light border-secondary"
-                          placeholder="Image URL (https://...)"
-                          value={block.content}
-                          onChange={(e) => updateContentBlock(block.id, e.target.value)}
-                        />
+                        <div className="mb-2">
+                          <ImageUpload 
+                            value={block.content}
+                            onChange={(url) => updateContentBlock(block.id, url)}
+                            placeholder="Image URL or Upload"
+                          />
+                        </div>
                         {block.content && (
                           <div className="mt-2 text-center">
                             <img 
                               src={block.content} 
                               alt="Preview"
                               className="img-fluid rounded"
-                              style={{ maxHeight: '200px' }}
-                              onError={(e) => {
-                                e.target.style.display = 'none';
-                              }}
+                              style={{ maxHeight: '300px' }}
                             />
                           </div>
                         )}

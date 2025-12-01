@@ -1,5 +1,9 @@
 // src/lib/http.js
 
+const BACKEND_URL = process.env.NODE_ENV === 'development' 
+  ? 'http://localhost:4000' 
+  : window.location.origin;
+
 // Base API relative ke domain (Plesk reverse proxy ke Node)
 export const API_BASE = '/api';
 
@@ -7,10 +11,19 @@ export const asAbsolute = (p = '') => {
   const s = String(p).trim();
   if (!s) return '';
   if (/^https?:\/\//i.test(s) || s.startsWith('data:')) return s;
-  // kalau ada yang terlanjur '/api/uploads/...', buang '/api'
-  const cleaned = s.startsWith('/api/') ? s.slice(4) : s;
-  const path = cleaned.startsWith('/') ? cleaned : `/${cleaned}`;
-  return `${window.location.origin}${path}`;
+
+  // 2. Normalisasi Path
+  let path = s.startsWith('/') ? s : `/${s}`;
+
+  // 3. FIX PENTING: Penyesuaian path '/uploads'
+  // Di server.js, kamu set statisnya di '/api/uploads'.
+  // Jadi jika database menyimpan '/uploads/gambar.jpg', kita harus tambah '/api' di depannya.
+  if (path.startsWith('/uploads')) {
+    path = `/api${path}`; 
+  }
+
+  // 4. Gabungkan dengan URL Backend yang benar
+  return `${BACKEND_URL}${path}`;
 };
 
 

@@ -52,6 +52,16 @@ export default function AdminHome() {
       addText: "Tambah Jurnal"
     },
     {
+      title: "Projects",
+      description: "Kelola produk & proyek lab (tambah, ubah, hapus).",
+      icon: "🚀",
+      color: "#17a2b8",
+      listLink: "/admin/projects",
+      addLink: "/admin/projects/new",
+      listText: "Lihat Daftar",
+      addText: "Tambah Project"
+    },
+    {
       title: "Collaborations",
       description: "Kelola kolaborasi (tambah, ubah, hapus).",
       icon: "🤝",
@@ -62,6 +72,7 @@ export default function AdminHome() {
       addText: "Tambah Kolaborasi"
     }
   ];
+
 
   return (
     <Layout>
